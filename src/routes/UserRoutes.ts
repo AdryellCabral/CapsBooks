@@ -26,13 +26,13 @@ userRouter.post("/", async (req, res) => {
   return res.status(201).json(classToClass(user));
 });
 
+userRouter.use(ensureAuth);
+
 userRouter.get("/", async (req, res) => {
   const listUsers = new ListUserService();
   const users = await listUsers.execute();
   return res.json(classToClass(users));
 });
-
-userRouter.use(ensureAuth);
 
 userRouter.get("/profile", async (req, res) => {
   const { id } = req.user;
