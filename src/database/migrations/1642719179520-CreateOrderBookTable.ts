@@ -20,6 +20,7 @@ export class CreateOrderBookTable1642719179520 implements MigrationInterface {
           {
             name: "book_id",
             type: "uuid",
+            isNullable: true,
           },
         ],
       })
