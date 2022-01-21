@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
+import OrderBook from "./OrderBook";
 import User from "./User";
 
 @Entity("orders")
@@ -20,6 +21,9 @@ class Order {
 
   @Column()
   user_id: string;
+
+  @OneToMany(() => OrderBook, (orderBook) => orderBook.order)
+  books: OrderBook[];
 }
 
 export default Order;
