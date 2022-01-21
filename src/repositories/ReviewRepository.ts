@@ -9,7 +9,7 @@ class ReviewRepository extends Repository<Review> {
   ): Promise<Review | undefined> {
     const review = await this.findOne({
       where: {
-        id: user_id,
+        user_id: user_id,
         book_id: book_id,
       },
     });
