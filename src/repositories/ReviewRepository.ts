@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from "typeorm";
 import Review from "../models/Review";
 
 @EntityRepository(Review)
-class UserRepository extends Repository<Review> {
+class ReviewRepository extends Repository<Review> {
   public async findByUserIdAndBookId(
     user_id: string,
     book_id: string
@@ -26,4 +26,4 @@ class UserRepository extends Repository<Review> {
   }
 }
 
-export default UserRepository;
+export default ReviewRepository;
