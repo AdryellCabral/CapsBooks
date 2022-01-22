@@ -1,38 +1,38 @@
-import { 
-    Entity,
-    Column,
-    PrimaryGeneratedColumn, 
-    CreateDateColumn, 
-    ManyToOne } from "typeorm";
-import User from "./User";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  ManyToOne,
+} from "typeorm";
 import Book from "./Book";
+import User from "./User";
 
 @Entity("reviews")
 class Review {
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-    @Column()
-    title: string;
+  @Column()
+  review: number;
 
-    @Column()
-    comment: string;
+  @Column()
+  comment: string;
 
-    @Column()
-    review: number;
+  @Column()
+  user_id: string;
 
-    @CreateDateColumn()
-    created_at: Date;
+  @Column()
+  book_id: string;
 
-    @Column()
-    userId: string;
+  @CreateDateColumn()
+  created_at: Date;
 
-    @ManyToOne(() => User)
-    user: User;
+  @ManyToOne(() => Book)
+  book: Book;
 
-    @ManyToOne(() => Book)
-    book: Book;
+  @ManyToOne(() => User)
+  user: User;
 }
 
 export default Review;
-
