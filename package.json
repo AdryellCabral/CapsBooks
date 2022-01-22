@@ -4,12 +4,23 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files",
+    "start": "node dist/app.js",
     "dev": "ts-node-dev --files --inspect --ignore-watch node_modules src/app.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
+    "@babel/cli": "^7.16.8",
+    "@babel/core": "^7.16.12",
+    "@babel/node": "^7.16.8",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/plugin-proposal-decorators": "^7.16.7",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
+    "babel-plugin-transform-decorators": "^6.24.1",
+    "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "bcryptjs": "^2.4.3",
-    "class-transformer": "^0.5.1",
+    "class-transformer": "0.3.1",
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
     "express-async-errors": "^3.1.1",
@@ -17,7 +28,9 @@
     "nodemailer": "^6.7.2",
     "nodemailer-express-handlebars": "^4.0.0",
     "pg": "^8.7.1",
-    "typeorm": "^0.2.41"
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.41",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -26,6 +39,6 @@
     "@types/nodemailer": "^6.4.4",
     "@types/nodemailer-express-handlebars": "^4.0.2",
     "ts-node-dev": "^1.1.8",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.5"
   }
 }
