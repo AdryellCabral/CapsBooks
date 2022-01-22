@@ -2,18 +2,19 @@ import { Router } from "express";
 import { getCustomRepository } from "typeorm";
 import CreateCartService from "../services/Cart/CreateCartService";
 import CartRepository from "../repositories/CartRepository";
-import UserRepository from "../repositories/UserRepository";
+import { cartSchema } from "../models/schemas/CartSchema";
+import { validate } from "../middlewares/validations/schema";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
-import AppError from "../errors/AppError";
 import DeleteBookInCartService from "../services/Cart/DeleteProductInCartService";
-import { classToClass } from "class-transformer";
 import checkIfAdmAndEqualId from "../middlewares/verifications/checkIfAdmAndEqualId";
+import AppError from "../errors/AppError";
+import { classToClass } from "class-transformer";
 
 const cartRouter = Router();
 
 cartRouter.use(ensureAuth)
 
-cartRouter.post("/", async (req, res) => {
+cartRouter.post("/", validate(cartSchema), async (req, res) => {
     const { books_ids } = req.body;
     const userId = req.user.id
 

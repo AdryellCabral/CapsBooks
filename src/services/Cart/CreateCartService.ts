@@ -1,8 +1,8 @@
 import { getCustomRepository, getRepository } from "typeorm";
 import Book from "../../models/Book";
+import Order from "../../models/Order";
 import AppError from "../../errors/AppError";
 import CartRepository from "../../repositories/CartRepository";
-import Order from "../../models/Order";
 
 interface Request {
   books_ids: string[];
