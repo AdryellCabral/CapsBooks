@@ -1,5 +1,6 @@
 import { getCustomRepository, getRepository } from "typeorm";
 import Book from "../../models/Book";
+import Order from "../../models/Order";
 import AppError from "../../errors/AppError";
 import CartRepository from "../../repositories/CartRepository";
 
@@ -14,20 +15,11 @@ class CreateCartService {
         const cartRepository = getCustomRepository(CartRepository);
         const bookRepository = getRepository(Book);
 
-        const books:Book[] = [];
+        const books = await bookRepository.findByIds(books_ids)
 
-        books_ids.forEach(async (bookId) => {
-            const [book] = await bookRepository.find({
-                where: {
-                    id: bookId,
-                },                
-            })
-            .catch((err) => {
-                throw new AppError("Invalid list of books")
-            });
-            
-            books.push(book)
-        });
+        if (!books[books_ids.length -1]){
+            throw new AppError("Invalid list of books")
+        };
 
         let cart = await cartRepository.findCart(userId);
 
