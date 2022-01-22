@@ -36,7 +36,7 @@ export default class AuthService {
     const expiresIn = process.env.EXPIRES_IN_JWT;
 
     const token = sign({}, secret, {
-      subject: user.id,
+      subject: user.id,      
       expiresIn,
     });
 
