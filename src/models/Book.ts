@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { 
+    Entity,
+    Column,
+    PrimaryGeneratedColumn, 
+    CreateDateColumn, 
+    UpdateDateColumn, 
+    OneToMany } from "typeorm";
+import Review from "./Review";
 
 @Entity("books")
 class Book {
@@ -19,6 +26,9 @@ class Book {
 
     @UpdateDateColumn()
     updated_at: Date;
+
+    @OneToMany(() => Review, (book) => book.review)
+    reviews: Review[];
 }
 
 export default Book;

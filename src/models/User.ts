@@ -4,8 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany
 } from "typeorm";
 import { Exclude } from "class-transformer";
+import Order from "./Order";
+import Review from "./Review";
 
 @Entity("users")
 class User {
@@ -30,6 +33,12 @@ class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
+
+  @OneToMany(() => Review, (review) => review.user)
+  review: Review[];
 }
 
 export default User;

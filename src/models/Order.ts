@@ -3,9 +3,11 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToMany,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
-import OrderBook from "./OrderBook";
+import { Exclude } from "class-transformer";
+import Book from "./Book";
 import User from "./User";
 
 @Entity("orders")
@@ -19,11 +21,12 @@ class Order {
   @ManyToOne(() => User, (user) => user)
   user: User;
 
+  @Exclude()
   @Column()
-  user_id: string;
+  userId: string;
 
-  @OneToMany(() => OrderBook, (orderBook) => orderBook.order)
-  books: OrderBook[];
+  @ManyToMany(() => Book) @JoinTable()
+  books: Book[];
 }
 
 export default Order;
