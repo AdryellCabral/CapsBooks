@@ -1,17 +1,16 @@
 import { Router } from "express";
-
 import CreateUserService from "../services/User/CreateUserService";
 import ListUserService from "../services/User/ListUserSercice";
 import UpdateUserService from "../services/User/UpdateUserService";
 import DeleteUserService from "../services/User/DeleteUserService";
 import RetrieveUserService from "../services/User/RetrieverUserService";
-
+import { userSchema } from "../models/schemas/UserSchema";
+import { validate } from "../middlewares/validations/schema";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
-
 import { classToClass } from "class-transformer";
 
 const userRouter = Router();
-userRouter.post("/", async (req, res) => {
+userRouter.post("/", validate(userSchema), async (req, res) => {
   const { name, email, password, is_adm } = req.body;
 
   const createUser = new CreateUserService();
