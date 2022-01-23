@@ -14,12 +14,7 @@ bookRouter.get("/:id", validate(bookSchema), async (req, res) => {
     
     const bookRepository = getRepository(Book);
     
-    const book = await bookRepository.findOne({
-        where: {
-            id,
-            closed: true
-        }
-    });
+    const book = await bookRepository.findOne(id);
     
     if (!book) {
         throw new AppError("Book not found", 404)
@@ -31,11 +26,7 @@ bookRouter.get("/:id", validate(bookSchema), async (req, res) => {
 bookRouter.get("/", async (req, res) => {
     const bookRepository = getRepository(Book);
 
-    const books = await bookRepository.find({
-        where: {
-            closed: true
-        }
-    });
+    const books = await bookRepository.find();
 
     return res.status(200).json(books);
 })
