@@ -7,7 +7,6 @@ import AppError from "../errors/AppError";
 import { classToClass } from "class-transformer";
 import checkIfAdmAndEqualId from "../middlewares/verifications/checkIfAdmAndEqualId";
 
-
 const purchaseRouter = Router();
 
 purchaseRouter.use(ensureAuth)
@@ -48,7 +47,11 @@ purchaseRouter.get("/:id", checkIfAdmAndEqualId, async (req, res) => {
 purchaseRouter.get("/", async (req, res) => {
     const purchaseRepository = getCustomRepository(PurchaseRepository);
 
-    const purchases = await purchaseRepository.find();
+    const purchases = await purchaseRepository.find({
+        where: {
+            closed: true
+        }
+    });
 
     return res.status(200).json(classToClass(purchases));
 })
