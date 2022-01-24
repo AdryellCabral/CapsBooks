@@ -2,12 +2,14 @@ import { Router } from "express";
 import { getRepository } from "typeorm";
 import Book from "../models/Book";
 import CreateBookService from "../services/Books/CreateBookService";
+import { bookSchema } from "../models/schemas/BookSchema";
+import { validate } from "../middlewares/validations/schema";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
 import AppError from "../errors/AppError";
 
 const bookRouter = Router();
 
-bookRouter.get("/:id", async (req, res) => {
+bookRouter.get("/:id", validate(bookSchema), async (req, res) => {
     const { id } = req.params;
     
     const bookRepository = getRepository(Book);

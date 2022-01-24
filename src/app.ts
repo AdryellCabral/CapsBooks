@@ -24,8 +24,8 @@ app.use((err: Error, req: Request, res: Response, nex_: NextFunction) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log(">>>> Server started on http://localhost:3000 <<<<");
+app.listen(process.env.PORT, () => {
+  console.log(">>>> Server started on port 3000 <<<<");
 });
 
 export default app;
