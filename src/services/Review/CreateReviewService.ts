@@ -1,8 +1,9 @@
-import { getCustomRepository } from "typeorm";
+import { getCustomRepository, getRepository } from "typeorm";
 import UserRepository from "../../repositories/UserRepository";
 import AppError from "../../errors/AppError";
 import Review from "../../models/Review";
 import ReviewRepository from "../../repositories/ReviewRepository";
+import Book from "../../models/Book";
 
 interface Request {
   user_id: string;
@@ -22,23 +23,23 @@ export default class CreateReviewService {
 
     const userRepository = getCustomRepository(UserRepository);
 
-    // const bookRepository = getCustomRepository(BookRepository)
+    const bookRepository = getRepository(Book);
 
     const checkUserExists = await userRepository.findOne({
       where: { id: user_id },
     });
 
-    // const checkBookExists = await bookRepository.findOne({
-    //   where: { id: book_id },
-    // });
+    const checkBookExists = await bookRepository.findOne({
+      where: { id: book_id },
+    });
 
     if (!checkUserExists) {
       throw new AppError("User not found!", 404);
     }
 
-    // if (!checkBookExists) {
-    //   throw new AppError("Book not found!", 404)
-    // }
+    if (!checkBookExists) {
+      throw new AppError("Book not found!", 404);
+    }
 
     const new_review = reviewRepository.create({
       review,
