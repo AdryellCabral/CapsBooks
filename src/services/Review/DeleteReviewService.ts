@@ -6,7 +6,7 @@ interface Request {
   id: string;
 }
 
-export default class DeleteUserService {
+export default class DeleteReviewService {
   public async execute({ id }: Request): Promise<DeleteResult> {
     const reviewRepository = getCustomRepository(ReviewRepository);
 
