@@ -40,6 +40,5 @@ const productionEnv = {
 module.exports =
   process.env.NODE_ENV === "production" ? productionEnv : process.env.NODE_ENV !== "test" ? developmentEnv : testEnv;
 
-// module.exports =
-//   process.env.NODE_ENV === "production" ? productionEnv : developmentEnv;
+
 
