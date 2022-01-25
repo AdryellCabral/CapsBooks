@@ -31,7 +31,7 @@ class Book {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => Review, (review) => review.book)
+  @OneToMany(() => Review, (review) => review.book, { eager: true })
   reviews: Review[];
 }
 

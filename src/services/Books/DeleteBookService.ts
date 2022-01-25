@@ -10,16 +10,12 @@ export default class DeleteBookService {
   public async execute({ id }: Request): Promise<DeleteResult> {
     const bookRepository = getRepository(Book);
 
-    const book = await bookRepository.findOne({
-      where: {
-        id,
-      },
-    });
+    const book = await bookRepository.findOne(id);
 
     if (!book) {
-      throw new AppError("Book not found.", 404);
+      throw new AppError("Book not found!", 404);
     }
-   
+    
     return bookRepository.delete(id);
   }
 }

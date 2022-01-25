@@ -6,23 +6,25 @@ import { bookSchema } from "../models/schemas/BookSchema";
 import { validate } from "../middlewares/validations/schema";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
 import AppError from "../errors/AppError";
+import onlyAdm from "../middlewares/verifications/onlyAdmMiddleware";
 import DeleteBookService from "../services/Books/DeleteBookService";
+import UpdateBookService from "../services/Books/UpdateBookService";
 
 const bookRouter = Router();
 
 bookRouter.get("/:id", async (req, res) => {
-    const { id } = req.params;
-    
-    const bookRepository = getRepository(Book);
-    
-    const book = await bookRepository.findOne(id);
-    
-    if (!book) {
-        throw new AppError("Book not found", 404)
-    }
-    
-    return res.status(200).json(book);
-})
+  const { id } = req.params;
+
+  const bookRepository = getRepository(Book);
+
+  const book = await bookRepository.findOne(id);
+
+  if (!book) {
+    throw new AppError("Book not found", 404);
+  }
+
+  return res.status(200).json(book);
+});
 
 bookRouter.get("/", async (req, res) => {
     const { title, author } = req.query;
@@ -68,22 +70,51 @@ bookRouter.get("/", async (req, res) => {
 
 })
 
-bookRouter.use(ensureAuth)
+bookRouter.use(ensureAuth);
 
 bookRouter.post("/", validate(bookSchema), async (req, res) => {
-    const {title, price, description, author} = req.body;
+  const { title, price, description, author } = req.body;
 
-    const bookCreate = new CreateBookService();
+  const bookCreate = new CreateBookService();
 
-    const book = await bookCreate.execute({
+  const book = await bookCreate.execute({
+    title,
+    price,
+    description,
+    author
+  });
+
+  return res.status(201).json(book);
+});
+
+bookRouter.delete("/:id", onlyAdm, async (req, res) => {
+  const { id } = req.params;
+
+  const deleteBook = new DeleteBookService();
+
+  await deleteBook.execute({
+    id,
+  });
+
+  return res.status(200).json({ message: "Book deleted with success" });
+});
+
+bookRouter.patch("/:id", onlyAdm, async (req, res) => {
+  const { id } = req.params;
+  const { title, description, price, author } = req.body;
+
+  const updateBook = new UpdateBookService();
+
+    const book = await updateBook.execute({
+        id,
         title,
         price,
         description,
         author        
     });
 
-    return res.status(201).json(book);    
-})
+  return res.status(200).json(book);
+});
 
 bookRouter.delete("/:id", async (req, res) => {
     const { id } = req.params;

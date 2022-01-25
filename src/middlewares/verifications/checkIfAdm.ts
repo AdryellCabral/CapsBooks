@@ -8,13 +8,17 @@ async function checkIfAdm(
     res: Response,
     next: NextFunction
     ): Promise<void> {
-    const { id } = req.user;    
+    const { id } = req.user;
 
     const userRepository = getCustomRepository(UserRepository);
 
     const user = await userRepository.findOne(id);
+    
+    if(!user){
+        throw new AppError("User not found");
+    }
 
-    if (user?.is_adm === false) {
+    if (!user.is_adm) {
         throw new AppError("Unauthorized. Only admin has access to this endpoint.", 401)
     }
 
