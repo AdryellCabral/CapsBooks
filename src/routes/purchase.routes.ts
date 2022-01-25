@@ -5,7 +5,8 @@ import CreatePurchaseService from "../services/Purchase/CreatePurchaseService";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
 import AppError from "../errors/AppError";
 import { classToClass } from "class-transformer";
-import checkIfAdmAndEqualId from "../middlewares/verifications/checkIfAdmAndEqualId";
+import checkIfAdm from "../middlewares/verifications/checkIfAdm";
+import checkIfAdmAndPurchaseEqualId from "../middlewares/verifications/checkIfAdmAndPurchaseEqualId";
 
 const purchaseRouter = Router();
 
@@ -23,7 +24,7 @@ purchaseRouter.post("/", async (req, res) => {
     return res.status(201).json(classToClass(purchase));    
 })
 
-purchaseRouter.get("/:id", checkIfAdmAndEqualId, async (req, res) => {
+purchaseRouter.get("/:id", checkIfAdmAndPurchaseEqualId, async (req, res) => {
     const { id } = req.params;
     
     const purchaseRepository = getCustomRepository(PurchaseRepository);
@@ -42,7 +43,7 @@ purchaseRouter.get("/:id", checkIfAdmAndEqualId, async (req, res) => {
     return res.status(200).json(classToClass(purchase));
 })
 
-// cartRouter.use(checkIfAdm);
+purchaseRouter.use(checkIfAdm);
 
 purchaseRouter.get("/", async (req, res) => {
     const purchaseRepository = getCustomRepository(PurchaseRepository);

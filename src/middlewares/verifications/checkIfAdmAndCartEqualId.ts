@@ -4,7 +4,7 @@ import UserRepository from "../../repositories/UserRepository";
 import AppError from "../../errors/AppError";
 import CartRepository from "../../repositories/CartRepository";
 
-async function checkIfAdmAndEqualId(
+async function checkIfAdmAndCartEqualId(
     req:Request,
     res: Response,
     next: NextFunction
@@ -33,5 +33,5 @@ async function checkIfAdmAndEqualId(
     next();
 }
 
-export default checkIfAdmAndEqualId;
+export default checkIfAdmAndCartEqualId;
 
