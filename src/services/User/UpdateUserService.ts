@@ -6,7 +6,8 @@ import { compare, hash } from "bcryptjs";
 import AppError from "../../errors/AppError";
 
 interface Request {
-  uuid: string;
+  id: string;
+  idLogged: string;
   name: string;
   email: string;
   password?: string;
@@ -15,16 +16,18 @@ interface Request {
 
 export default class UpdateUserService {
   public async execute({
-    uuid,
+    id,
+    idLogged,
     name,
     email,
     password,
     old_password,
   }: Request): Promise<User> {
     const userRepository = getCustomRepository(UserRepository);
+    
     const user = await userRepository.findOne({
       where: {
-        id: uuid,
+        id,
       },
     });
 
@@ -32,9 +35,15 @@ export default class UpdateUserService {
       throw new AppError("User not found");
     }
 
+    const userLogged = await userRepository.findOne({
+      where: {
+        id: idLogged,
+      },
+    });
+
     const userWithUpdatedEmail = await userRepository.findByEmail(email);
 
-    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== uuid) {
+    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== id) {
       throw new AppError("Email already in use", 409);
     }
 

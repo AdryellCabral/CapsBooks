@@ -1,0 +1,42 @@
+import { Router } from "express";
+import { classToClass } from "class-transformer";
+import SendEmailService from "../services/Mailer/mailer";
+import UserRepository from "../repositories/UserRepository";
+import { getCustomRepository } from "typeorm";
+
+import jwt from "jsonwebtoken";
+
+import AppError from "../errors/AppError";
+
+
+const recoverRouter = Router();
+recoverRouter.post("/", async (req, res) => {
+  const { email } = req.body;
+  const userRepository = getCustomRepository(UserRepository);
+  
+  const user = await userRepository.findByEmail(email);
+
+  if(!user){
+    throw new AppError("Email already exists");
+  }
+
+  const name = user.name
+
+  const token: string = jwt.sign(
+    {sub:user.password,},
+    process.env.CHANGE_PASSWORD_VALIDATION_KEY,
+    {expiresIn: "1h"}
+  );
+
+  const createUser = new SendEmailService();
+  const mailerType="changePassword"
+
+  await createUser.execute(email, mailerType, {
+    name, 
+    token
+  });
+
+  return res.status(201).json(classToClass(user));
+});
+
+export default recoverRouter;

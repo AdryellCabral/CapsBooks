@@ -5,10 +5,11 @@ import CartRepository from "../repositories/CartRepository";
 import { cartSchema } from "../models/schemas/CartSchema";
 import { validate } from "../middlewares/validations/schema";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
-import DeleteBookInCartService from "../services/Cart/DeleteProductInCartService";
-import checkIfAdmAndEqualId from "../middlewares/verifications/checkIfAdmAndEqualId";
+import DeleteBookInCartService from "../services/Cart/DeleteBookInCartService";
 import AppError from "../errors/AppError";
 import { classToClass } from "class-transformer";
+import checkIfAdm from "../middlewares/verifications/checkIfAdm";
+import checkIfAdmAndCartEqualId from "../middlewares/verifications/checkIfAdmAndCartEqualId";
 
 const cartRouter = Router();
 
@@ -29,7 +30,7 @@ cartRouter.post("/", validate(cartSchema), async (req, res) => {
     return res.status(201).json(classToClass(cart));    
 })
 
-cartRouter.get("/:id", checkIfAdmAndEqualId, async (req, res) => {
+cartRouter.get("/:id", checkIfAdmAndCartEqualId, async (req, res) => {
     const { id } = req.params;
         
     const cartRepository = getCustomRepository(CartRepository);
@@ -48,21 +49,23 @@ cartRouter.get("/:id", checkIfAdmAndEqualId, async (req, res) => {
     return res.status(200).json(classToClass(cart));
 })
 
-cartRouter.delete("/:bookId", checkIfAdmAndEqualId, async (req, res) => {
+cartRouter.delete("/:bookId", async (req, res) => {
     const { bookId } = req.params;
-    const userId = req.user.id;
+    const { email } = req.body;
+    const idLogged = req.user.id;
 
     const cartToDeleteBook = new DeleteBookInCartService();
 
     const cart = await cartToDeleteBook.execute({
         bookId,
-        userId,    
+        email,
+        idLogged    
     });
         
     return res.status(200).json(classToClass(cart));
 })
 
-// cartRouter.use(checkIfAdm);
+cartRouter.use(checkIfAdm);
 
 cartRouter.get("/", async (req, res) => {
     const cartRepository = getCustomRepository(CartRepository);

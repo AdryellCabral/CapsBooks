@@ -19,7 +19,7 @@ class Book {
   @Column()
   description: string;
 
-  @Column()
+  @Column({type: "decimal", precision: 5, scale: 2, default: 0.00})
   price: number;
 
   @CreateDateColumn()

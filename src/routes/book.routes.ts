@@ -6,6 +6,9 @@ import { bookSchema } from "../models/schemas/BookSchema";
 import { validate } from "../middlewares/validations/schema";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
 import AppError from "../errors/AppError";
+import onlyAdm from "../middlewares/verifications/onlyAdmMiddleware";
+import DeleteBookService from "../services/Books/DeleteBookService";
+import UpdateBookService from "../services/Books/UpdateBookService";
 
 const bookRouter = Router();
 
@@ -45,6 +48,34 @@ bookRouter.post("/", validate(bookSchema), async (req, res) => {
   });
 
   return res.status(201).json(book);
+});
+
+bookRouter.delete("/:id", onlyAdm, async (req, res) => {
+  const { id } = req.params;
+
+  const deleteBook = new DeleteBookService();
+
+  await deleteBook.execute({
+    id,
+  });
+
+  return res.status(200).json({ message: "Book deleted with success" });
+});
+
+bookRouter.patch("/:id", onlyAdm, async (req, res) => {
+  const { id } = req.params;
+  const { title, description, price } = req.body;
+
+  const updatedUserService = new UpdateBookService();
+
+  const user = await updatedUserService.execute({
+    id,
+    title,
+    description,
+    price,
+  });
+
+  return res.status(200).json(user);
 });
 
 export default bookRouter;
