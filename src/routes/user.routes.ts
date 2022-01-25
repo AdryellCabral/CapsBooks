@@ -8,6 +8,8 @@ import { userSchema } from "../models/schemas/UserSchema";
 import { validate } from "../middlewares/validations/schema";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
 import { classToClass } from "class-transformer";
+import onlyAdm from "../middlewares/verifications/onlyAdmMiddleware";
+import AdmOrUserLoged from "../middlewares/verifications/AdmOrUserLogedMiddleware";
 
 const userRouter = Router();
 userRouter.post("/", validate(userSchema), async (req, res) => {
@@ -27,7 +29,7 @@ userRouter.post("/", validate(userSchema), async (req, res) => {
 
 userRouter.use(ensureAuth);
 
-userRouter.get("/", async (req, res) => {
+userRouter.get("/", onlyAdm, async (req, res) => {
   const listUsers = new ListUserService();
   const users = await listUsers.execute();
   return res.json(classToClass(users));
@@ -40,7 +42,7 @@ userRouter.get("/profile", async (req, res) => {
   return res.json(classToClass(user));
 });
 
-userRouter.patch("/:uuid", async (req, res) => {
+userRouter.patch("/:uuid", AdmOrUserLoged, async (req, res) => {
   const { uuid } = req.params;
   const { name, email } = req.body;
 
@@ -51,7 +53,7 @@ userRouter.patch("/:uuid", async (req, res) => {
   return res.json(classToClass(user));
 });
 
-userRouter.delete("/:uuid", async (req, res) => {
+userRouter.delete("/:uuid", AdmOrUserLoged, async (req, res) => {
   const { uuid } = req.params;
 
   const deleteUser = new DeleteUserService();
