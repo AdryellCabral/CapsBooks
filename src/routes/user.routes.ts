@@ -1,6 +1,6 @@
 import { Router } from "express";
 import CreateUserService from "../services/User/CreateUserService";
-import ListUserService from "../services/User/ListUserSercice";
+import ListUserService from "../services/User/ListUserService";
 import UpdateUserService from "../services/User/UpdateUserService";
 import DeleteUserService from "../services/User/DeleteUserService";
 import RetrieveUserService from "../services/User/RetrieverUserService";
@@ -10,6 +10,7 @@ import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
 import { classToClass } from "class-transformer";
 import AppError from "../errors/AppError";
 import checkIfAdm from "../middlewares/verifications/checkIfAdm";
+import AdmOrUserLoged from "../middlewares/verifications/AdmOrUserLogedMiddleware";
 
 const userRouter = Router();
 userRouter.post("/", validate(userSchema), async (req, res) => {
@@ -40,7 +41,7 @@ userRouter.get("/profile", async (req, res) => {
   return res.json(classToClass(user));
 });
 
-userRouter.patch("/:id", async (req, res) => {
+userRouter.patch("/:id", AdmOrUserLoged, async (req, res) => {
   const { id } = req.params;
   const { name, email } = req.body;
   const idLogged = req.user.id;
@@ -56,7 +57,7 @@ userRouter.patch("/:id", async (req, res) => {
   return res.json(classToClass(user));
 });
 
-userRouter.delete("/:id", async (req, res) => {
+userRouter.delete("/:id", AdmOrUserLoged, async (req, res) => {
   const { id } = req.params;
   const idLogged = req.user.id;
 

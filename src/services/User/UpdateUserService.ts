@@ -1,7 +1,6 @@
 import { getCustomRepository } from "typeorm";
 import User from "../../models/User";
 import UserRepository from "../../repositories/UserRepository";
-
 import AppError from "../../errors/AppError";
 
 interface Request {
@@ -30,10 +29,6 @@ export default class UpdateUserService {
         id: idLogged,
       },
     });
-
-    if ( id !== idLogged && userLogged?.is_adm === false) {
-      throw new AppError("Missing admin permissions", 401)
-    }
 
     const userWithUpdatedEmail = await userRepository.findByEmail(email);
 

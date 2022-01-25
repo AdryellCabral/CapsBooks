@@ -31,10 +31,6 @@ export default class DeleteUserService {
       throw new AppError("Not found any user with this id.");
     }   
 
-    if (id !== idLogged && userLogged?.is_adm === false) {
-      throw new AppError("Missing admin permissions", 401)
-    }
-
     return userRepository.delete(id);
   }
 }
