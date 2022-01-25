@@ -8,10 +8,16 @@ import { userSchema } from "../models/schemas/UserSchema";
 import { validate } from "../middlewares/validations/schema";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
 import { classToClass } from "class-transformer";
+import AppError from "../errors/AppError";
+import checkIfAdm from "../middlewares/verifications/checkIfAdm";
 
 const userRouter = Router();
 userRouter.post("/", validate(userSchema), async (req, res) => {
   const { name, email, password, is_adm } = req.body;
+
+  if(typeof name !== "string" || typeof password !== "string"){
+    throw new AppError("Name and password must be string", 400);
+  }
 
   const createUser = new CreateUserService();
 
@@ -27,12 +33,6 @@ userRouter.post("/", validate(userSchema), async (req, res) => {
 
 userRouter.use(ensureAuth);
 
-userRouter.get("/", async (req, res) => {
-  const listUsers = new ListUserService();
-  const users = await listUsers.execute();
-  return res.json(classToClass(users));
-});
-
 userRouter.get("/profile", async (req, res) => {
   const { id } = req.user;
   const getUser = new RetrieveUserService();
@@ -40,27 +40,42 @@ userRouter.get("/profile", async (req, res) => {
   return res.json(classToClass(user));
 });
 
-userRouter.patch("/:uuid", async (req, res) => {
-  const { uuid } = req.params;
+userRouter.patch("/:id", async (req, res) => {
+  const { id } = req.params;
   const { name, email } = req.body;
+  const idLogged = req.user.id;
+
+  if(name && typeof name !== "string"){
+    throw new AppError("Name must be string", 400);
+  }
 
   const updateUser = new UpdateUserService();
 
-  const user = await updateUser.execute({ uuid, name, email });
+  const user = await updateUser.execute({ id, idLogged, name, email });
 
   return res.json(classToClass(user));
 });
 
-userRouter.delete("/:uuid", async (req, res) => {
-  const { uuid } = req.params;
+userRouter.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  const idLogged = req.user.id;
 
   const deleteUser = new DeleteUserService();
 
   await deleteUser.execute({
-    id: uuid,
+    id,
+    idLogged
   });
 
   return res.json({ message: "User deleted with success" });
+});
+
+userRouter.use(checkIfAdm);
+
+userRouter.get("/", async (req, res) => {
+  const listUsers = new ListUserService();
+  const users = await listUsers.execute();
+  return res.json(classToClass(users));
 });
 
 export default userRouter;
