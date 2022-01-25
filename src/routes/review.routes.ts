@@ -5,15 +5,8 @@ import onlyAdm from "../middlewares/verifications/onlyAdmMiddleware";
 import CreateReviewService from "../services/Review/CreateReviewService";
 import RetrieveReviewService from "../services/Review/RetrieveReviewService";
 import DeleteReviewService from "../services/Review/DeleteReviewService";
-import ListReviewService from "../services/Review/ListReviewService";
 
 const reviewRouter = Router();
-
-// reviewRouter.get("/review", async (req, res) => {
-//   const listReview = new ListReviewService();
-//   const reviews = await listReview.execute();
-//   return res.json(reviews);
-// });
 
 reviewRouter.use(ensureAuth);
 
