@@ -9,7 +9,7 @@ import AppError from "../errors/AppError";
 
 const bookRouter = Router();
 
-bookRouter.get("/:id", validate(bookSchema), async (req, res) => {
+bookRouter.get("/:id", async (req, res) => {
     const { id } = req.params;
     
     const bookRepository = getRepository(Book);
@@ -33,7 +33,7 @@ bookRouter.get("/", async (req, res) => {
 
 bookRouter.use(ensureAuth)
 
-bookRouter.post("/", async (req, res) => {
+bookRouter.post("/", validate(bookSchema), async (req, res) => {
     const {title, price, description} = req.body;
 
     const bookCreate = new CreateBookService();
