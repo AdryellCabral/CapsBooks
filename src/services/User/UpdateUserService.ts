@@ -1,21 +1,22 @@
 import { getCustomRepository } from "typeorm";
 import User from "../../models/User";
 import UserRepository from "../../repositories/UserRepository";
-
 import AppError from "../../errors/AppError";
 
 interface Request {
-  uuid: string;
+  id: string;
+  idLogged: string;
   name: string;
   email: string;
 }
 
 export default class UpdateUserService {
-  public async execute({ uuid, name, email }: Request): Promise<User> {
+  public async execute({ id, idLogged, name, email }: Request): Promise<User> {
     const userRepository = getCustomRepository(UserRepository);
+    
     const user = await userRepository.findOne({
       where: {
-        id: uuid,
+        id,
       },
     });
 
@@ -23,9 +24,15 @@ export default class UpdateUserService {
       throw new AppError("User not found");
     }
 
+    const userLogged = await userRepository.findOne({
+      where: {
+        id: idLogged,
+      },
+    });
+
     const userWithUpdatedEmail = await userRepository.findByEmail(email);
 
-    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== uuid) {
+    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== id) {
       throw new AppError("Email already in use");
     }
 

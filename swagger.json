@@ -1,0 +1,830 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Common User App",
+      "description": "This is a sample server for a book store.",
+      "contact": {
+        "name": "API Support",
+        "url": "http://www.example.com/support",
+        "email": "support@example.com"
+      },
+      "version": "1.0.1"
+    },
+  
+    "servers": [
+      {
+        "url": "http://localhost:3000/api-documentation",
+        "description": "test"
+      }
+    ],
+    "paths": {
+      "/users": {
+        "post": {
+          "description": "Essa rota é responsavel por cadastrar um usuário.",
+          "tags": ["Users"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserReq" }
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "name": "Patrick Nekel",
+                    "email": "nekeldev@gmail.com",
+                    "password": "1234",
+                    "is_adm": false
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "400": {
+              "description": "Email already exists"
+            },
+            "201": {
+              "description": "Created",
+              "content": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserRes"
+                }
+              }
+            }
+          }
+        },
+        "get": {
+          "description": "Essa rota é responsavel por listar todos os usuários. Apenas usuários admin podem acessar essa rota.",
+          "tags": ["Users"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+              },
+              "examples": {
+                "user": {
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Unauthorized"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "schema": {
+                  "type": "object[]",
+                  "$ref": "#/components/schemas/UserRes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/sessions": {
+        "post": {
+          "description": "Essa rota é responsavel por autenticar um usuário.",
+          "tags": ["Users"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SessionReq" }
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "email": "nekeldev@gmail.com",
+                    "password": "1234"
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Incorrect email / password combination"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/SessionRes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/users/{id}": {
+        "get": {
+          "description": "Essa rota é responsavel por listar um usuário específico. Um usuário não admin pode buscar apenas seu próprio usuário.",
+          "tags": ["Users"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+              },
+              "examples": {
+                "user": {
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing admin permissions"
+            },
+            "404": {
+              "description": "User not found"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserRes"
+                }
+              }
+            }
+          }
+        }
+      },     
+      "/product": {
+        "post": {
+          "description": "Essa rota é responsavel por cadastrar um produto. Apenas usuários admin têm acesso a esse endpoint.",
+          "tags": ["Products"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProductReq" }
+              },
+              "examples": {
+                "product": {
+                  "value": {
+                    "name": "uva roxa",
+                    "price": 8.49,
+                    "description": "Docinha, docinha"
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Unauthorized"
+            },
+            "201": {
+              "description": "Created",
+              "content": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/ProductRes"
+                }
+              }
+            }
+          }
+        },
+        "get": {
+          "description": "Essa rota é responsavel por listar todos os produtos. Qualquer usuário autenticado tem acesso a esse endpoint.",
+          "tags": ["Products"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+              },
+              "examples": {
+                "product": {
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing authorization headers"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "schema": {
+                  "type": "object[]",
+                  "$ref": "#/components/schemas/ProductList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/product/{id}": {
+        "get": {
+          "description": "Essa rota é responsavel por listar um produto específico. Qualquer usuário autenticado tem acesso a esse endpoint.",
+          "tags": ["Products"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+              },
+              "examples": {
+                "product": {
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing authorization headers"
+            },
+            "404": {
+              "description": "Product not found"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/ProductRes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/cart": {
+        "post": {
+          "description": "Essa rota é responsavel por colocar um produto no carrinho. Qualquer usuário autenticado tem acesso a esse endpoint.",
+          "tags": ["Cart"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartAndBuyReq" }
+              },
+              "examples": {
+                "cart": {
+                  "value": {
+                    "products_is": ["b123a8c1-14e2-4046-ad37-87f8ebc84ba2", 
+                      "1974b2ef-d3ec-4ad7-8a59-a0772e49886e"]                    
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing authorization headers"
+            },
+            "400": {
+              "description": "Invalid list of products"
+            },
+            "200": {
+              "description": "Ok",
+              "content": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/CartAndBuyRes"
+                }
+              }
+            }
+          }
+        },
+        "get": {
+          "description": "Essa rota é responsavel por listar todos os carrinhos. Apenas usuários admin têm acesso a esse endpoint.",
+          "tags": ["Cart"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+              },
+              "examples": {
+                "cart": {
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Unauthorized"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "schema": {
+                  "type": "object[]",
+                  "$ref": "#/components/schemas/CartAndBuyList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/cart/{id}": {
+        "get": {
+          "description": "Essa rota é responsavel por listar um carrinho específico. Um usuário não admin pode visualizar apenas seu próprio carrinho.",
+          "tags": ["Cart"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+              },
+              "examples": {
+                "cart": {
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing admin permissions"
+            },
+            "404": {
+              "description": "Cart not found"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "schema": {
+                  "type":"object",
+                  "$ref": "#/components/schemas/CartAndBuyRes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/cart/{product_id}": {
+        "delete": {
+          "description": "Essa rota é responsavel por excluir um item de um carrinho específico. Um usuário não admin só pode excluir itens do seu próprio carrinho.",
+          "tags": ["Cart"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Email" }
+              },
+              "examples": {
+                "cart": {
+                  "value": {
+                    "email": "john1@mail.com"                    
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing admin permissions"
+            },
+            "404": {
+              "description": "User not found, Cart not found, Product not found, Product not found in cart"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "schema": {
+                  "type":"object",
+                  "$ref": "#/components/schemas/CartAndBuyRes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/buy": {
+        "post": {
+          "description": "Essa rota é responsavel por concluir a compra dos itens que estão no carrinho. Qualquer usuário autenticado tem acesso a esse endpoint.",
+          "tags": ["Buy"],
+          "requestBody": {
+            "content": {
+              "application/json": {                
+              },
+              "examples": {
+                "buy": {
+                  "value": {                        
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing authorization headers"
+            },
+            "201": {
+              "description": "Ok",
+              "content": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/CartAndBuyRes"
+                }
+              }
+            }
+          }
+        },
+        "get": {
+          "description": "Essa rota é responsavel por listar todas as compras. Apenas usuários admin têm acesso a esse endpoint.",
+          "tags": ["Buy"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+              },
+              "examples": {
+                "buy": {
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Unauthorized"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "schema": {
+                  "type": "object[]",
+                  "$ref": "#/components/schemas/CartAndBuyList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/buy/{id}": {
+        "get": {
+          "description": "Essa rota é responsavel por listar uma compra específica. Um usuário não admin pode visualizar apenas suas próprias compras.",
+          "tags": ["Buy"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+              },
+              "examples": {
+                "buy": {
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing admin permissions"
+            },
+            "404": {
+              "description": "Buy not found"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "schema": {
+                  "type":"object",
+                  "$ref": "#/components/schemas/CartAndBuyRes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/email": {
+        "post": {
+          "description": "Envia um email para um usuário específico informando quanto ele já gastou até o momento na loja. Apenas um usuário admin pode ter acesso a esse endpoint.",
+          "tags": ["Mailer"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Email" }
+              },
+              "examples": {
+                "mailer": {
+                  "value": {
+                    "email": "john@mail.com"                    
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing admin permissions"
+            },
+            "404": {
+              "description": "User not found"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+              }
+            }
+          }
+        }
+      },
+      "/recuperar": {
+        "post": {
+          "description": "Envia um email para um usuário solicitando com um código de confirmação para trocar a senha.",
+          "tags": ["Mailer"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Email" }
+              },
+              "examples": {
+                "mailer": {
+                  "value": {
+                    "email": "john@mail.com"                    
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "404": {
+              "description": "User not found"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+              }
+            }
+          }
+        }
+      },
+      "/alterar_senha": {
+        "post": {
+          "description": "Usando o código de verificação, o usuário consegue gravar nova senha. O usuário recebe um email de confirmação.",
+          "tags": ["Mailer"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NovaSenha" }
+              },
+              "examples": {
+                "mailer": {
+                  "value": {
+                    "email": "john1@mail.com",
+                    "password": "123456",
+                    "token": "3ad414c381c82a5fa4210b3c88deca086986eeec"                   
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "400": {
+              "description": "Invalid token, Token expired; generate a new one"
+            },
+            "404": {
+              "description": "User not found"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+              }
+            }
+          }
+        }
+      }                
+    },
+    "components": {
+      "schemas": {
+        "UserReq": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "is_adm": {
+              "type": "boolean"
+            }
+          }
+        },
+        "UserRes": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "is_adm": {
+              "type": "boolean"
+            },
+            "created_at": {
+              "type": "timestamp"
+            },
+            "updated_at": {
+              "type": "timestamp"
+            }
+          }
+        },
+        "UserList": {
+          "type":"object[]",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "is_adm": {
+              "type": "boolean"
+            },
+            "created_at": {
+              "type": "timestamp"
+            },
+            "updated_at": {
+              "type": "timestamp"
+            }
+          }
+        },
+        "SessionReq": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
+        },
+        "SessionRes": {
+          "type": "object",
+          "properties": {
+            "token": {
+             "type": "string"
+            }
+          }
+        },
+        "ProductReq": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "price": {
+              "type": "number"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "ProductRes": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "price": {
+              "type": "number"
+            },
+            "description": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "timestamp"
+            },
+            "updated_at": {
+              "type": "timestamp"
+            }
+          }
+        },
+        "ProductList": {
+          "type": "object[]",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "price": {
+              "type": "number"
+            },
+            "description": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "timestamp"
+            },
+            "updated_at": {
+              "type": "timestamp"
+            }
+          }
+        },
+        "CartAndBuyReq": {
+          "type": "object",
+          "properties": {
+            "products_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "CartAndBuyRes": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "userId": {
+              "type": "string"
+            },
+            "products": {
+              "type":"object[]",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "timestamp"
+                },
+                "product": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "number"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "timestamp"
+                    },
+                    "updated_at": {
+                      "type": "timestamp"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "CartAndBuyList": {
+          "type": "object[]",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "userId": {
+              "type": "string"
+            },
+            "products": {
+              "type": "object[]",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "timestamp"
+                },
+                "product": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "number"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "timestamp"
+                    },
+                    "updated_at": {
+                      "type": "timestamp"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Email": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            }            
+          }
+        },
+        "NovaSenha": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "token": {
+              "type": "string"
+            }                
+          }
+        }
+      }
+    }
+  } 

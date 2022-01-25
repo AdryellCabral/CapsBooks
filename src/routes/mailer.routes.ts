@@ -1,23 +1,12 @@
 import { Router } from "express";
-import CreateUserService from "../services/User/CreateUserService";
-import ListUserService from "../services/User/ListUserSercice";
-import UpdateUserService from "../services/User/UpdateUserService";
-import DeleteUserService from "../services/User/DeleteUserService";
-import RetrieveUserService from "../services/User/RetrieverUserService";
-import { userSchema } from "../models/schemas/UserSchema";
-import { validate } from "../middlewares/validations/schema";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
 import { classToClass } from "class-transformer";
 import SendEmailService from "../services/Mailer/mailer";
 import UserRepository from "../repositories/UserRepository";
 import { getCustomRepository } from "typeorm";
 
-import jwt from "jsonwebtoken";
-import { compare, hash } from "bcryptjs";
-
 import AppError from "../errors/AppError";
 import isAdmAuth from "../middlewares/verifications/checkIfAdm";
-// import changePasswordAuth from "../middlewares/verifications/changePasswordAuth";
 
 
 
