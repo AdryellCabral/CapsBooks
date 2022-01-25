@@ -1,6 +1,6 @@
 import { Router } from "express";
 import CreateUserService from "../services/User/CreateUserService";
-import ListUserService from "../services/User/ListUserSercice";
+import ListUserService from "../services/User/ListUserService";
 import UpdateUserService from "../services/User/UpdateUserService";
 import DeleteUserService from "../services/User/DeleteUserService";
 import RetrieveUserService from "../services/User/RetrieverUserService";
