@@ -14,7 +14,7 @@ describe("Testing the user CRUD", () => {
   });
 
   let token = "";
-  let user_id = "";
+  let id = "";
 
   it("Should be able to create a new user", async () => {
     const response = await request(app).post("/user").send({
@@ -24,7 +24,10 @@ describe("Testing the user CRUD", () => {
       is_adm: true,
     });
 
-    user_id = response.body.id;
+    id = response.body.id;
+
+    console.log(id);
+
     expect(response.status).toBe(201);
   });
 
@@ -59,7 +62,7 @@ describe("Testing the user CRUD", () => {
 
   it("Should be able to delete the created user", async () => {
     const response = await request(app)
-      .delete(`/user/${user_id}`)
+      .delete(`/user/${id}`)
       .set({ Authorization: `Bearer ${token}` });
 
     expect(response.status).toBe(200);
