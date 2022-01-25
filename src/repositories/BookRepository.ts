@@ -3,10 +3,10 @@ import Book from "../models/Book";
 
 @EntityRepository(Book)
 class BookRepository extends Repository<Book> {
-  public async findBookById(book_id: string): Promise<Book | undefined> {
+  public async findBookById(id: string): Promise<Book | undefined> {
     const book = await this.findOne({
       where: {
-        book_id,
+        id,
       },
     });
     return book;
