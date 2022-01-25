@@ -28,11 +28,13 @@
                 "schema": { "$ref": "#/components/schemas/UserReq" }
               },
               "examples": {
-                "value": {
-                  "name": "Patrick Nekel",
-                  "email": "nekeldev@gmail.com",
-                  "password": "1234",
-                  "is_adm": false
+                "user": {
+                  "value": {
+                    "name": "Patrick Nekel",
+                    "email": "nekeldev@gmail.com",
+                    "password": "1234",
+                    "is_adm": false
+                  }
                 }
               }
             }
