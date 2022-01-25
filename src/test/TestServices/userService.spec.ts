@@ -33,10 +33,8 @@ describe("Testing the user CRUD", () => {
 
   it("Should be able to login with the created user", async () => {
     const response = await request(app).post("/login").send({
-      name: "user",
       email: "user@mail.com",
       password: "1234",
-      is_adm: true,
     });
 
     token = response.body.token;
