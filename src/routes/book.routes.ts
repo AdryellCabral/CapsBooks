@@ -9,42 +9,42 @@ import AppError from "../errors/AppError";
 
 const bookRouter = Router();
 
-bookRouter.get("/:id", validate(bookSchema), async (req, res) => {
-    const { id } = req.params;
-    
-    const bookRepository = getRepository(Book);
-    
-    const book = await bookRepository.findOne(id);
-    
-    if (!book) {
-        throw new AppError("Book not found", 404)
-    }
-    
-    return res.status(200).json(book);
-})
+bookRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const bookRepository = getRepository(Book);
+
+  const book = await bookRepository.findOne(id);
+
+  if (!book) {
+    throw new AppError("Book not found", 404);
+  }
+
+  return res.status(200).json(book);
+});
 
 bookRouter.get("/", async (req, res) => {
-    const bookRepository = getRepository(Book);
+  const bookRepository = getRepository(Book);
 
-    const books = await bookRepository.find();
+  const books = await bookRepository.find();
 
-    return res.status(200).json(books);
-})
+  return res.status(200).json(books);
+});
 
-bookRouter.use(ensureAuth)
+bookRouter.use(ensureAuth);
 
-bookRouter.post("/", async (req, res) => {
-    const {title, price, description} = req.body;
+bookRouter.post("/", validate(bookSchema), async (req, res) => {
+  const { title, price, description } = req.body;
 
-    const bookCreate = new CreateBookService();
+  const bookCreate = new CreateBookService();
 
-    const book = await bookCreate.execute({
-        title,
-        price,
-        description        
-    });
+  const book = await bookCreate.execute({
+    title,
+    price,
+    description,
+  });
 
-    return res.status(201).json(book);    
-})
+  return res.status(201).json(book);
+});
 
 export default bookRouter;

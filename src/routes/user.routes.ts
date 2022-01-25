@@ -44,11 +44,17 @@ userRouter.get("/profile", async (req, res) => {
 
 userRouter.patch("/:uuid", AdmOrUserLoged, async (req, res) => {
   const { uuid } = req.params;
-  const { name, email } = req.body;
+  const { name, email, password, old_password } = req.body;
 
   const updateUser = new UpdateUserService();
 
-  const user = await updateUser.execute({ uuid, name, email });
+  const user = await updateUser.execute({
+    uuid,
+    name,
+    email,
+    password,
+    old_password,
+  });
 
   return res.json(classToClass(user));
 });
