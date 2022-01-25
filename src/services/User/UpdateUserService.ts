@@ -21,7 +21,7 @@ export default class UpdateUserService {
     });
 
     if (!user) {
-      throw new AppError("User not found");
+      throw new AppError("User not found", 404);
     }
 
     const userLogged = await userRepository.findOne({
@@ -33,7 +33,7 @@ export default class UpdateUserService {
     const userWithUpdatedEmail = await userRepository.findByEmail(email);
 
     if (userWithUpdatedEmail && userWithUpdatedEmail.id !== id) {
-      throw new AppError("Email already in use");
+      throw new AppError("Email already in use", 409);
     }
 
     name ? (user.name = name) : user.name;

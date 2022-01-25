@@ -18,7 +18,7 @@ export default class DeleteUserService {
     });
 
     if (!user) {
-      throw new AppError("Not found any user with this id.");
+      throw new AppError("Not found any user with this id.", 404);
     }
     
     const userLogged = await userRepository.findOne({
@@ -28,7 +28,7 @@ export default class DeleteUserService {
     });
 
     if (!user) {
-      throw new AppError("Not found any user with this id.");
+      throw new AppError("Not found any user with this id.", 404);
     }   
 
     return userRepository.delete(id);

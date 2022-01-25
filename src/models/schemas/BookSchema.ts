@@ -7,6 +7,9 @@ export const bookSchema = yup.object().shape({
     price: yup
       .number()
       .required(),
+    author: yup
+      .string()
+      .required(),
     description: yup
       .string()
       .required(),

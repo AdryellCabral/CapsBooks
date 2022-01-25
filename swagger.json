@@ -25,30 +25,40 @@
           "requestBody": {
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/UserReq" }
-              },
-              "examples": {
-                "user": {
-                  "value": {
-                    "name": "Patrick Nekel",
-                    "email": "nekeldev@gmail.com",
-                    "password": "1234",
-                    "is_adm": false
+                "schema": { "$ref": "#/components/schemas/UserReq" },
+                "examples": {
+                  "Patrick": {
+                    "value": {
+                      "name": "Patrick Nekel",
+                      "email": "nekeldev@gmail.com",
+                      "password": "1234",
+                      "is_adm": false
+                    }
                   }
                 }
               }
             }
           },
           "responses": {
-            "400": {
+            "409": {
               "description": "Email already exists"
             },
             "201": {
               "description": "Created",
-              "content": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/UserRes"
+               "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/UserRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "Patrick Nekel",
+                        "email": "nekeldev@gmail.com",
+                        "is_adm": false,
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-25T02:13:05.384Z"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -60,10 +70,6 @@
           "requestBody": {
             "content": {
               "application/json": {
-              },
-              "examples": {
-                "user": {
-                }
               }
             }
           },
@@ -74,9 +80,19 @@
             "200": {
               "description": "OK",
               "content": {
-                "schema": {
-                  "type": "object[]",
-                  "$ref": "#/components/schemas/UserRes"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/UserList" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "Patrick Nekel",
+                        "email": "nekeldev@gmail.com",
+                        "is_adm": false,
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-25T02:13:05.384Z"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -90,17 +106,17 @@
           "requestBody": {
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SessionReq" }
-              },
-              "examples": {
-                "user": {
-                  "value": {
-                    "email": "nekeldev@gmail.com",
-                    "password": "1234"
+                "schema": { "$ref": "#/components/schemas/SessionReq" },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "email": "nekeldev@gmail.com",
+                      "password": "1234"
+                    }
                   }
                 }
               }
-            }
+            }              
           },
           "responses": {
             "401": {
@@ -109,9 +125,15 @@
             "200": {
               "description": "OK",
               "content": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/SessionRes"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/SessionRes" },
+                  "examples": {
+                    "Response": {
+                      "value": {
+                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDMxMjg5MDUsImV4cCI6MTY0MzIxNTMwNSwic3ViIjoiNTgyZGFiODYtMDIyZi00MWZkLTg0NmQtMWY5ODExZTQyMTExIn0.O17q9vUY2q9nMU3Fs7ZdOUdAELwpXhqZhDx0Kfj2tOs"                       
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -120,17 +142,13 @@
       },
       "/users/{id}": {
         "get": {
-          "description": "Essa rota é responsavel por listar um usuário específico. Um usuário não admin pode buscar apenas seu próprio usuário.",
+          "description": "Essa rota é responsavel por listar um usuário específico. Precisa de autenticação. Um usuário não admin pode buscar apenas seu próprio usuário.",
           "tags": ["Users"],
           "requestBody": {
             "content": {
-              "application/json": {
-              },
-              "examples": {
-                "user": {
-                }
+              "application/json": {                
               }
-            }
+            }   
           },
           "responses": {
             "401": {
@@ -579,59 +597,71 @@
     "components": {
       "schemas": {
         "UserReq": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            },
-            "is_adm": {
-              "type": "boolean"
+          "schemas":{
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "is_adm": {
+                "type": "boolean"
+              }
             }
           }
         },
         "UserRes": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string"
-            },
-            "is_adm": {
-              "type": "boolean"
-            },
-            "created_at": {
-              "type": "timestamp"
-            },
-            "updated_at": {
-              "type": "timestamp"
+          "schemas": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "is_adm": {
+                "type": "boolean"
+              },
+              "created_at": {
+                "type": "timestamp"
+              },
+              "updated_at": {
+                "type": "timestamp"
+              }
             }
           }
         },
         "UserList": {
-          "type":"object[]",
-          "properties": {
-            "name": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string"
-            },
-            "is_adm": {
-              "type": "boolean"
-            },
-            "created_at": {
-              "type": "timestamp"
-            },
-            "updated_at": {
-              "type": "timestamp"
+          "schemas": {
+            "ArrayOfUsers": {
+              "type":"array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "is_adm": {
+                    "type": "boolean"
+                  },
+                  "created_at": {
+                    "type": "timestamp"
+                  },
+                  "updated_at": {
+                    "type": "timestamp"
+                  }
+                }
+              }
+           
             }
           }
         },
