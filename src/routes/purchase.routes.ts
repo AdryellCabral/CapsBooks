@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { getCustomRepository } from "typeorm";
 import PurchaseRepository from "../repositories/PurchaseRepository";
+import UserRepository from "../repositories/UserRepository";
 import CreatePurchaseService from "../services/Purchase/CreatePurchaseService";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
 import AppError from "../errors/AppError";
 import { classToClass } from "class-transformer";
-import checkIfAdmAndEqualId from "../middlewares/verifications/checkIfAdmAndEqualId";
-
+import checkIfAdm from "../middlewares/verifications/checkIfAdm";
+import checkIfAdmAndPurchaseEqualId from "../middlewares/verifications/checkIfAdmAndPurchaseEqualId";
+import SendEmailService from "../services/Mailer/mailer"
 
 const purchaseRouter = Router();
 
@@ -21,10 +23,23 @@ purchaseRouter.post("/", async (req, res) => {
         userId,    
     });
 
+  const createUser = new SendEmailService();
+  const userRepository = getCustomRepository(UserRepository);
+
+  const user = await userRepository.findOne(userId);
+  if ( !user ){
+    throw new AppError("Not found any user with this id.", 404);
+  }
+
+  await createUser.execute(user.email, "report", {
+    name: user.name ,
+    totalCost: purchase.getTotal(),
+  });
+
     return res.status(201).json(classToClass(purchase));    
 })
 
-purchaseRouter.get("/:id", checkIfAdmAndEqualId, async (req, res) => {
+purchaseRouter.get("/:id", checkIfAdmAndPurchaseEqualId, async (req, res) => {
     const { id } = req.params;
     
     const purchaseRepository = getCustomRepository(PurchaseRepository);
@@ -43,12 +58,16 @@ purchaseRouter.get("/:id", checkIfAdmAndEqualId, async (req, res) => {
     return res.status(200).json(classToClass(purchase));
 })
 
-// cartRouter.use(checkIfAdm);
+purchaseRouter.use(checkIfAdm);
 
 purchaseRouter.get("/", async (req, res) => {
     const purchaseRepository = getCustomRepository(PurchaseRepository);
 
-    const purchases = await purchaseRepository.find();
+    const purchases = await purchaseRepository.find({
+        where: {
+            closed: true
+        }
+    });
 
     return res.status(200).json(classToClass(purchases));
 })

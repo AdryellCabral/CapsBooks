@@ -17,9 +17,12 @@ class Book {
   title: string;
 
   @Column()
-  description: string;
+  author: string;
 
   @Column()
+  description: string;
+
+  @Column({type: "decimal", precision: 5, scale: 2})
   price: number;
 
   @CreateDateColumn()
@@ -28,7 +31,7 @@ class Book {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => Review, (review) => review.book)
+  @OneToMany(() => Review, (review) => review.book, { eager: true })
   reviews: Review[];
 }
 

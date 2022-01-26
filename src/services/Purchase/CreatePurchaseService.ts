@@ -16,11 +16,11 @@ class CreatePurchaseService {
         let cart = await cartRepository.findCart(userId);
 
         if (!cart) {
-            throw new AppError("No cart was found");
+            throw new AppError("No cart was found", 404);
         }
 
         if (cart.books.length === 0) {
-            throw new AppError("Cart is empty");
+            throw new AppError("Cart is empty", 422);
         }
 
         cart.closed = true;
@@ -34,7 +34,7 @@ class CreatePurchaseService {
         });
 
         if(!purchase) {
-            throw new AppError("Buy not found");
+            throw new AppError("Buy not found", 404);
         }
 
         return purchase;

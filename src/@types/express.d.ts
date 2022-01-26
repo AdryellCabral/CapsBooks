@@ -3,5 +3,9 @@ declare namespace Express {
       user: {
         id: string;
       };
+      validation: {
+        password:string
+      }
+
     }
   }
