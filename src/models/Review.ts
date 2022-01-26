@@ -28,10 +28,10 @@ class Review {
   @CreateDateColumn()
   created_at: Date;
 
-  @ManyToOne(() => Book)
+  @ManyToOne(() => Book, { onDelete: "CASCADE" })
   book: Book;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
   user: User;
 }
 

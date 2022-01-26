@@ -1,14 +1,14 @@
 import { Router } from "express";
-import { getRepository } from "typeorm";
+import { getRepository, ILike } from "typeorm";
 import Book from "../models/Book";
 import CreateBookService from "../services/Books/CreateBookService";
-import { bookSchema } from "../models/schemas/BookSchema";
-import { validate } from "../middlewares/validations/schema";
-import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
-import AppError from "../errors/AppError";
-import onlyAdm from "../middlewares/verifications/onlyAdmMiddleware";
 import DeleteBookService from "../services/Books/DeleteBookService";
 import UpdateBookService from "../services/Books/UpdateBookService";
+import checkIfAdm from "../middlewares/verifications/checkIfAdm";
+import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
+import { bookSchema } from "../models/schemas/BookSchema";
+import { validate } from "../middlewares/validations/schema";
+import AppError from "../errors/AppError";
 
 const bookRouter = Router();
 
@@ -27,17 +27,52 @@ bookRouter.get("/:id", async (req, res) => {
 });
 
 bookRouter.get("/", async (req, res) => {
-  const bookRepository = getRepository(Book);
+    const { title, author } = req.query;
 
-  const books = await bookRepository.find();
+    const bookRepository = getRepository(Book);
+    
+    if (!title && !author) {    
+        const books = await bookRepository.find();
+    
+        return res.status(200).json(books);
+    }    
+    
+    if (title && !author) {
+        const books = await bookRepository.find({
+            where: {
+                title: ILike(`%${title}%`), 
+            }
+        });
+        
+        return res.status(200).json(books);
+    }
 
-  return res.status(200).json(books);
-});
+    if (!title && author) {
+        const books = await bookRepository.find({
+            where: {
+                author: ILike(`%${author}%`), 
+            }
+        });
+        
+        return res.status(200).json(books);
+    }
 
-bookRouter.use(ensureAuth);
+    if (title && author) {
+        const books = await bookRepository.find({
+            where: {
+                author: ILike(`%${author}%`),
+                title: ILike(`%${title}%`)
+            }
+        });
+        
+        return res.status(200).json(books);
+    }
+})
+
+bookRouter.use(ensureAuth, checkIfAdm);
 
 bookRouter.post("/", validate(bookSchema), async (req, res) => {
-  const { title, price, description } = req.body;
+  const { title, price, description, author } = req.body;
 
   const bookCreate = new CreateBookService();
 
@@ -45,12 +80,13 @@ bookRouter.post("/", validate(bookSchema), async (req, res) => {
     title,
     price,
     description,
+    author
   });
 
   return res.status(201).json(book);
 });
 
-bookRouter.delete("/:id", onlyAdm, async (req, res) => {
+bookRouter.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
   const deleteBook = new DeleteBookService();
@@ -59,23 +95,24 @@ bookRouter.delete("/:id", onlyAdm, async (req, res) => {
     id,
   });
 
-  return res.status(200).json({ message: "Book deleted with success" });
+  return res.status(204).json({ message: "Book deleted with success" });
 });
 
-bookRouter.patch("/:id", onlyAdm, async (req, res) => {
+bookRouter.patch("/:id", async (req, res) => {
   const { id } = req.params;
-  const { title, description, price } = req.body;
+  const { title, description, price, author } = req.body;
 
-  const updatedUserService = new UpdateBookService();
+  const updateBook = new UpdateBookService();
 
-  const user = await updatedUserService.execute({
-    id,
-    title,
-    description,
-    price,
-  });
+    const book = await updateBook.execute({
+        id,
+        title,
+        price,
+        description,
+        author        
+    });
 
-  return res.status(200).json(user);
+  return res.status(200).json(book);
 });
 
 export default bookRouter;

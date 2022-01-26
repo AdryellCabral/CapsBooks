@@ -8,6 +8,7 @@ interface Request {
   title: string;
   price: number;
   description: string;
+  author: string;
 }
 
 export default class UpdateBookService {
@@ -16,6 +17,7 @@ export default class UpdateBookService {
     title,
     price,
     description,
+    author
   }: Request): Promise<Book> {
     const bookRepository = getCustomRepository(BookRepository);
     const book = await bookRepository.findOne(id);
@@ -27,6 +29,7 @@ export default class UpdateBookService {
     title ? (book.title = title) : book.title;
     price ? (book.price = price) : book.price;
     description ? (book.description = description) : book.description;
+    author ? (book.author = author) : book.author;
 
     await bookRepository.save(book);
 

@@ -14,10 +14,10 @@ import {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
-    @ManyToOne(() => Book, {eager: true})
+    @ManyToOne(() => Book, { eager: true, onDelete: "SET NULL" })
     book: Book;
 
-    @ManyToOne(() => Order)
+    @ManyToOne(() => Order, { onDelete: "CASCADE" })
     order: Order;
 
     @Exclude()

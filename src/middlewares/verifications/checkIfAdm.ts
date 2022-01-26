@@ -15,7 +15,7 @@ async function checkIfAdm(
     const user = await userRepository.findOne(id);
     
     if(!user){
-        throw new AppError("User not found");
+        throw new AppError("User not found", 404);
     }
 
     if (!user.is_adm) {

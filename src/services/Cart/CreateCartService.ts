@@ -20,7 +20,7 @@ class CreateCartService {
         const books = await bookRepository.findByIds(books_ids)
 
         if (!books[books_ids.length -1]){
-            throw new AppError("Invalid list of books")
+            throw new AppError("Invalid list of books", 400)
         };
 
         let cart = await cartRepository.findCart(userId);
@@ -45,7 +45,7 @@ class CreateCartService {
         const checkedCart = await cartRepository.findCart(userId);
 
         if(!checkedCart){
-            throw new AppError("Cart not found");
+            throw new AppError("Cart not found", 404);
         }
 
         return checkedCart;

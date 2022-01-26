@@ -32,7 +32,7 @@ export default class UpdateUserService {
     });
 
     if (!user) {
-      throw new AppError("User not found");
+      throw new AppError("User not found", 404);
     }
 
     const userLogged = await userRepository.findOne({

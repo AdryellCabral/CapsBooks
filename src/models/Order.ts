@@ -21,7 +21,7 @@ class Order {
   @Column()
   userId: string;
 
-  @ManyToOne(() => User, (user) => user)
+  @ManyToOne(() => User, (user) => user, { onDelete: "CASCADE" })
   user: User;
 
   @OneToMany(() => OrderBook, (orderBook) => orderBook.order, {eager: true})
