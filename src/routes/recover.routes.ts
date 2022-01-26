@@ -36,7 +36,7 @@ recoverRouter.post("/", async (req, res) => {
     token
   });
 
-  return res.status(201).json(classToClass(user));
+  return res.status(200).json({"message": "email with the token to change password sent"});
 });
 
 export default recoverRouter;
