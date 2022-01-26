@@ -27,7 +27,7 @@
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/UserReq" },
                 "examples": {
-                  "Patrick": {
+                  "Example": {
                     "value": {
                       "name": "Patrick Nekel",
                       "email": "nekeldev@gmail.com",
@@ -84,13 +84,13 @@
                   "schema": { "$ref": "#/components/schemas/UserList" },
                   "examples": {
                     "Example": {
-                      "value": {
+                      "value": [{
                         "name": "Patrick Nekel",
                         "email": "nekeldev@gmail.com",
                         "is_adm": false,
                         "created_at": "2022-01-25T02:13:05.384Z",
 	                      "updated_at": "2022-01-25T02:13:05.384Z"
-                      }
+                      }]
                     }
                   }
                 }
@@ -140,7 +140,7 @@
           }
         }
       },
-      "/user/{id}": {
+      "/user/profile": {
         "get": {
           "description": "Essa rota é responsavel por listar as informações do usuário logado. Precisa de autenticação.",
           "tags": ["User"],
@@ -177,7 +177,9 @@
               }
             }
           }
-        },
+        }
+      },
+      "/user/{id}": {      
         "patch": {
           "description": "Essa rota é responsavel por atualizar um usuário específico. Precisa de autenticação. Um usuário não admin pode buscar apenas seu próprio usuário.",
           "tags": ["User"],
@@ -304,20 +306,27 @@
           "requestBody": {
             "content": {
               "application/json": {
-              },
-              "examples": {
-                "product": {
-                }
-              }
+              }            
             }
           },
           "responses": {
             "200": {
               "description": "OK",
               "content": {
-                "schema": {
-                  "type": "object[]",
-                  "$ref": "#/components/schemas/BookList"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/BookList" },
+                  "examples": {
+                    "Example": {
+                      "value": [{
+                        "name": "A História da Programação",
+                        "price": 30.49,
+                        "description": "Excelente livro.",
+                        "author": "Peter Jr",
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-26T02:13:05.384Z"
+                      }]
+                    }
+                  }
                 }
               }
             }
@@ -797,28 +806,45 @@
     },
     "components": {
       "schemas": {
-        "UserReq": {
-          "schemas":{
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "email": {
-                "type": "string"
-              },
-              "password": {
-                "type": "string"
-              },
-              "is_adm": {
-                "type": "boolean"
-              }
+        "UserReq": {  
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "is_adm": {
+              "type": "boolean"
+            }
+          }          
+        },
+        "UserRes": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "is_adm": {
+              "type": "boolean"
+            },
+            "created_at": {
+              "type": "timestamp"
+            },
+            "updated_at": {
+              "type": "timestamp"
             }
           }
         },
-        "UserRes": {
-          "schemas": {
-            "type": "object",
+        "UserList": {
+            "type": "object[]",
             "properties": {
               "name": {
                 "type": "string"
@@ -835,35 +861,7 @@
               "updated_at": {
                 "type": "timestamp"
               }
-            }
-          }
-        },
-        "UserList": {
-          "schemas": {
-            "ArrayOfUsers": {
-              "type":"array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "is_adm": {
-                    "type": "boolean"
-                  },
-                  "created_at": {
-                    "type": "timestamp"
-                  },
-                  "updated_at": {
-                    "type": "timestamp"
-                  }
-                }
-              }
-           
-            }
+    
           }
         },
         "SessionReq": {
@@ -925,7 +923,7 @@
             }
           }
         },
-        "ProductList": {
+        "BookList": {
           "type": "object[]",
           "properties": {
             "name": {

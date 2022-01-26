@@ -32,7 +32,7 @@ mailerRouter.post("/", ensureAuth, isAdmAuth, async (req, res) => {
     totalCost,
   });
 
-  return res.status(201).json(classToClass(user));
+  return res.status(200).json({"message": "email sent!"});
 });
 
 export default mailerRouter;

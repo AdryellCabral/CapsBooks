@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { getCustomRepository } from "typeorm";
 import PurchaseRepository from "../repositories/PurchaseRepository";
+import UserRepository from "../repositories/UserRepository";
 import CreatePurchaseService from "../services/Purchase/CreatePurchaseService";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
 import AppError from "../errors/AppError";
 import { classToClass } from "class-transformer";
 import checkIfAdm from "../middlewares/verifications/checkIfAdm";
 import checkIfAdmAndPurchaseEqualId from "../middlewares/verifications/checkIfAdmAndPurchaseEqualId";
+import SendEmailService from "../services/Mailer/mailer"
 
 const purchaseRouter = Router();
 
@@ -20,6 +22,19 @@ purchaseRouter.post("/", async (req, res) => {
     const purchase = await createPurchase.execute({        
         userId,    
     });
+
+  const createUser = new SendEmailService();
+  const userRepository = getCustomRepository(UserRepository);
+
+  const user = await userRepository.findOne(userId);
+  if ( !user ){
+    throw new AppError("Not found any user with this id.", 404);
+  }
+
+  await createUser.execute(user.email, "report", {
+    name: user.name ,
+    totalCost: purchase.getTotal(),
+  });
 
     return res.status(201).json(classToClass(purchase));    
 })
