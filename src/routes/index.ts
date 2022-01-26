@@ -16,7 +16,7 @@ routes.use("/user", userRouter);
 routes.use("/book", bookRouter);
 routes.use("/cart", cartRouter);
 routes.use("/purchase", purchaseRouter);
-routes.use("/book", reviewRouter);
+routes.use("/review", reviewRouter);
 routes.use("/email", mailerRouter);
 routes.use("/recover", recoverRouter);
 routes.use("/change_password", changePasswordRouter);
