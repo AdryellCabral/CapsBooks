@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   ManyToOne,
 } from "typeorm";
+import { Exclude } from "class-transformer";
 import Book from "./Book";
 import User from "./User";
 
@@ -19,19 +20,21 @@ class Review {
   @Column()
   comment: string;
 
+  @Exclude()
   @Column()
-  user_id: string;
+  userId: string;
 
+  @Exclude()
   @Column()
-  book_id: string;
+  bookId: string;
 
   @CreateDateColumn()
   created_at: Date;
 
-  @ManyToOne(() => Book, { onDelete: "CASCADE" })
+  @ManyToOne(() => Book, (book) => book, { onDelete: "CASCADE" })
   book: Book;
 
-  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, (user) => user, { onDelete: "CASCADE" })
   user: User;
 }
 
