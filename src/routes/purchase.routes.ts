@@ -7,6 +7,7 @@ import AppError from "../errors/AppError";
 import { classToClass } from "class-transformer";
 import checkIfAdm from "../middlewares/verifications/checkIfAdm";
 import checkIfAdmAndPurchaseEqualId from "../middlewares/verifications/checkIfAdmAndPurchaseEqualId";
+import UserRepository from "../repositories/UserRepository";
 
 const purchaseRouter = Router();
 
@@ -43,10 +44,28 @@ purchaseRouter.get("/:id", checkIfAdmAndPurchaseEqualId, async (req, res) => {
     return res.status(200).json(classToClass(purchase));
 })
 
-purchaseRouter.use(checkIfAdm);
-
 purchaseRouter.get("/", async (req, res) => {
+    const id = req.user.id
+
+    const userRepository = getCustomRepository(UserRepository);
     const purchaseRepository = getCustomRepository(PurchaseRepository);
+
+    const user = await userRepository.findOne(id);
+
+    if(!user){
+        throw new AppError("User not found");
+    }
+
+    if (user.is_adm === false){
+        const purchases = await purchaseRepository.find({
+            where: {
+                closed: true,
+                userId: id
+            }
+        });
+    
+        return res.status(200).json(classToClass(purchases));
+    }
 
     const purchases = await purchaseRepository.find({
         where: {
