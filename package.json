@@ -30,6 +30,7 @@
     "nodemailer-express-handlebars": "^4.0.0",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.0.2",
     "swagger-ui-express": "^4.3.0",
     "typeorm": "^0.2.41",
     "yup": "^0.32.11"
