@@ -12,12 +12,12 @@ const app = express();
 app.use(express.json());
 
 app.use(
-    "/api-documentation",
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerDocument)
-    );
+  "/api-documentation",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
 
-    app.use(routes);
+app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof AppError) {
@@ -30,10 +30,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     status: "error",
     message: "Internal Server Error",
   });
-});
-
-app.listen(process.env.PORT || 3000, () => {
-  console.log(">>>> Server started on port 3000 <<<<");
 });
 
 export default app;
