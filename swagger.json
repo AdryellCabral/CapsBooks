@@ -18,37 +18,47 @@
       }
     ],
     "paths": {
-      "/users": {
+      "/user": {
         "post": {
           "description": "Essa rota é responsavel por cadastrar um usuário.",
-          "tags": ["Users"],
+          "tags": ["User"],
           "requestBody": {
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/UserReq" }
-              },
-              "examples": {
-                "user": {
-                  "value": {
-                    "name": "Patrick Nekel",
-                    "email": "nekeldev@gmail.com",
-                    "password": "1234",
-                    "is_adm": false
+                "schema": { "$ref": "#/components/schemas/UserReq" },
+                "examples": {
+                  "Patrick": {
+                    "value": {
+                      "name": "Patrick Nekel",
+                      "email": "nekeldev@gmail.com",
+                      "password": "1234",
+                      "is_adm": false
+                    }
                   }
                 }
               }
             }
           },
           "responses": {
-            "400": {
+            "409": {
               "description": "Email already exists"
             },
             "201": {
               "description": "Created",
-              "content": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/UserRes"
+               "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/UserRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "Patrick Nekel",
+                        "email": "nekeldev@gmail.com",
+                        "is_adm": false,
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-25T02:13:05.384Z"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -56,14 +66,10 @@
         },
         "get": {
           "description": "Essa rota é responsavel por listar todos os usuários. Apenas usuários admin podem acessar essa rota.",
-          "tags": ["Users"],
+          "tags": ["User"],
           "requestBody": {
             "content": {
               "application/json": {
-              },
-              "examples": {
-                "user": {
-                }
               }
             }
           },
@@ -74,33 +80,43 @@
             "200": {
               "description": "OK",
               "content": {
-                "schema": {
-                  "type": "object[]",
-                  "$ref": "#/components/schemas/UserRes"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/UserList" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "Patrick Nekel",
+                        "email": "nekeldev@gmail.com",
+                        "is_adm": false,
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-25T02:13:05.384Z"
+                      }
+                    }
+                  }
                 }
               }
             }
           }
         }
       },
-      "/sessions": {
+      "/login": {
         "post": {
           "description": "Essa rota é responsavel por autenticar um usuário.",
-          "tags": ["Users"],
+          "tags": ["Login"],
           "requestBody": {
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SessionReq" }
-              },
-              "examples": {
-                "user": {
-                  "value": {
-                    "email": "nekeldev@gmail.com",
-                    "password": "1234"
+                "schema": { "$ref": "#/components/schemas/SessionReq" },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "email": "nekeldev@gmail.com",
+                      "password": "1234"
+                    }
                   }
                 }
               }
-            }
+            }              
           },
           "responses": {
             "401": {
@@ -109,32 +125,34 @@
             "200": {
               "description": "OK",
               "content": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/SessionRes"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/SessionRes" },
+                  "examples": {
+                    "Response": {
+                      "value": {
+                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDMxMjg5MDUsImV4cCI6MTY0MzIxNTMwNSwic3ViIjoiNTgyZGFiODYtMDIyZi00MWZkLTg0NmQtMWY5ODExZTQyMTExIn0.O17q9vUY2q9nMU3Fs7ZdOUdAELwpXhqZhDx0Kfj2tOs"                       
+                      }
+                    }
+                  }
                 }
               }
             }
           }
         }
       },
-      "/users/{id}": {
+      "/user/{id}": {
         "get": {
-          "description": "Essa rota é responsavel por listar um usuário específico. Um usuário não admin pode buscar apenas seu próprio usuário.",
-          "tags": ["Users"],
+          "description": "Essa rota é responsavel por listar as informações do usuário logado. Precisa de autenticação.",
+          "tags": ["User"],
           "requestBody": {
             "content": {
-              "application/json": {
-              },
-              "examples": {
-                "user": {
-                }
+              "application/json": {                
               }
-            }
+            }   
           },
           "responses": {
             "401": {
-              "description": "Missing admin permissions"
+              "description": "Missing authorization headers, Invalid Token"
             },
             "404": {
               "description": "User not found"
@@ -142,30 +160,38 @@
             "200": {
               "description": "OK",
               "content": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/UserRes"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/UserRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "Patrick Nekel",
+                        "email": "nekeldev@gmail.com",
+                        "is_adm": false,
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-25T02:13:05.384Z"
+                      }
+                    }
+                  }
                 }
               }
             }
           }
-        }
-      },     
-      "/product": {
-        "post": {
-          "description": "Essa rota é responsavel por cadastrar um produto. Apenas usuários admin têm acesso a esse endpoint.",
-          "tags": ["Products"],
+        },
+        "patch": {
+          "description": "Essa rota é responsavel por atualizar um usuário específico. Precisa de autenticação. Um usuário não admin pode buscar apenas seu próprio usuário.",
+          "tags": ["User"],
           "requestBody": {
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ProductReq" }
-              },
-              "examples": {
-                "product": {
-                  "value": {
-                    "name": "uva roxa",
-                    "price": 8.49,
-                    "description": "Docinha, docinha"
+                "schema": { "$ref": "#/components/schemas/UserReq" },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "name": "Patrick Nekel Jr",
+                      "email": "nekeldev@yahoo.com",
+                      "password": "123456"
+                    }
                   }
                 }
               }
@@ -173,22 +199,108 @@
           },
           "responses": {
             "401": {
-              "description": "Unauthorized"
+              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
+            },
+            "404": {
+              "description": "User not found"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/UserRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "Patrick Nekel Jr",
+                        "email": "nekeldev@yahoo.com",
+                        "is_adm": false,
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-26T02:13:05.384Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "description": "Essa rota é responsavel por excluir um usuário específico. Precisa de autenticação. Um usuário não admin pode buscar apenas seu próprio usuário.",
+          "tags": ["User"],
+          "requestBody": {
+            "content": {
+              "application/json": {               
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
+            },
+            "404": {
+              "description": "User not found"
+            },
+            "204": {
+              "description": "OK",
+              "content": {
+                "application/json": {                 
+                }
+              }
+            }
+          }
+        }
+      },            
+      "/book": {
+        "post": {
+          "description": "Essa rota é responsavel por cadastrar um livro. Precisa de autenticação. Apenas usuários admin têm acesso a esse endpoint.",
+          "tags": ["Book"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BookReq" },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "name": "A História da Programação",
+                      "price": 30.49,
+                      "description": "Excelente livro.",
+                      "author": "Peter Jr"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing authorization headers, Invalid Token, Unauthorized. Only admin has access to this endpoint."
             },
             "201": {
               "description": "Created",
               "content": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/ProductRes"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/BookRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "A História da Programação",
+                        "price": 30.49,
+                        "description": "Excelente livro.",
+                        "author": "Peter Jr",
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-26T02:13:05.384Z"
+                      }
+                    }
+                  }
                 }
               }
             }
           }
         },
         "get": {
-          "description": "Essa rota é responsavel por listar todos os produtos. Qualquer usuário autenticado tem acesso a esse endpoint.",
-          "tags": ["Products"],
+          "description": "Essa rota é responsavel por listar todos os livros. É possível filtrar por título e/ou autor. Qualquer pessoa tem acesso a esse endpoint (não precisa estar autenticado).",
+          "tags": ["Book"],
           "requestBody": {
             "content": {
               "application/json": {
@@ -200,54 +312,126 @@
             }
           },
           "responses": {
-            "401": {
-              "description": "Missing authorization headers"
-            },
             "200": {
               "description": "OK",
               "content": {
                 "schema": {
                   "type": "object[]",
-                  "$ref": "#/components/schemas/ProductList"
+                  "$ref": "#/components/schemas/BookList"
                 }
               }
             }
           }
         }
       },
-      "/product/{id}": {
+      "/book/{id}": {
         "get": {
-          "description": "Essa rota é responsavel por listar um produto específico. Qualquer usuário autenticado tem acesso a esse endpoint.",
-          "tags": ["Products"],
+          "description": "Essa rota é responsavel por listar umlivro específico. Qualquer pessoa tem acesso a esse endpoint (não precisa estar autenticado).",
+          "tags": ["Book"],
+          "requestBody": {
+            "content": {
+              "application/json": {                
+              }
+            }   
+          },
+          "responses": {
+            "404": {
+              "description": "Book not found"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/BookRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "A História da Programação",
+                        "price": 30.49,
+                        "description": "Excelente livro.",
+                        "author": "Peter Jr",
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-26T02:13:05.384Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "description": "Essa rota é responsavel por atualizar um livro específico. Precisa de autenticação. Apenas um usuário admin tem acesso a essa rota.",
+          "tags": ["Book"],
           "requestBody": {
             "content": {
               "application/json": {
-              },
-              "examples": {
-                "product": {
+                "schema": { "$ref": "#/components/schemas/BookReq" },
+                "examples": {
+                  "Patrick": {
+                    "value": {
+                      "price": 40.49
+                    }
+                  }
                 }
               }
             }
           },
           "responses": {
             "401": {
-              "description": "Missing authorization headers"
+              "description": "Missing authorization headers, Invalid Token, Unauthorized. Only admin has access to this endpoint."
             },
             "404": {
-              "description": "Product not found"
+              "description": "Book not found"
             },
             "200": {
               "description": "OK",
               "content": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/ProductRes"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/BookRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "A História da Programação",
+                        "price": 40.49,
+                        "description": "Excelente livro.",
+                        "author": "Peter Jr",
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-26T02:13:05.384Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "description": "Essa rota é responsavel por excluir um livro específico. Precisa de autenticação. Apenas um usuário admin tem acesso a essa rota.",
+          "tags": ["Book"],
+          "requestBody": {
+            "content": {
+              "application/json": {               
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing authorization headers, Invalid Token, Unauthorized. Only admin has access to this endpoint."
+            },
+            "404": {
+              "description": "User not found"
+            },
+            "204": {
+              "description": "OK",
+              "content": {
+                "application/json": {                 
                 }
               }
             }
           }
         }
-      },
+      }, 
       "/cart": {
         "post": {
           "description": "Essa rota é responsavel por colocar um produto no carrinho. Qualquer usuário autenticado tem acesso a esse endpoint.",
@@ -255,13 +439,12 @@
           "requestBody": {
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/CartAndBuyReq" }
-              },
-              "examples": {
-                "cart": {
-                  "value": {
-                    "products_is": ["b123a8c1-14e2-4046-ad37-87f8ebc84ba2", 
-                      "1974b2ef-d3ec-4ad7-8a59-a0772e49886e"]                    
+                "schema": { "$ref": "#/components/schemas/CartAndBuyReq" },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "books_ids": ["455dd9ea-f4e3-4bf3-8150-ef2ebe9097c2"]
+                    }
                   }
                 }
               }
@@ -269,17 +452,28 @@
           },
           "responses": {
             "401": {
-              "description": "Missing authorization headers"
+              "description": "Missing authorization headers, Invalid Token,Unauthorized. Only admin has access to this endpoint."
             },
             "400": {
-              "description": "Invalid list of products"
+              "description": "Invalid list of books"
             },
             "200": {
               "description": "Ok",
               "content": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/CartAndBuyRes"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/CartAndBuyRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "A História da Programação",
+                        "price": 40.49,
+                        "description": "Excelente livro.",
+                        "author": "Peter Jr",
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-26T02:13:05.384Z"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -291,23 +485,30 @@
           "requestBody": {
             "content": {
               "application/json": {
-              },
-              "examples": {
-                "cart": {
-                }
-              }
+              }             
             }
           },
           "responses": {
             "401": {
-              "description": "Unauthorized"
+              "description": "Missing authorization headers, Invalid Token, Unauthorized"
             },
             "200": {
               "description": "OK",
               "content": {
-                "schema": {
-                  "type": "object[]",
-                  "$ref": "#/components/schemas/CartAndBuyList"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/CartAndBuyRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "A História da Programação",
+                        "price": 40.49,
+                        "description": "Excelente livro.",
+                        "author": "Peter Jr",
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-26T02:13:05.384Z"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -321,16 +522,12 @@
           "requestBody": {
             "content": {
               "application/json": {
-              },
-              "examples": {
-                "cart": {
-                }
               }
             }
           },
           "responses": {
             "401": {
-              "description": "Missing admin permissions"
+              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
             },
             "404": {
               "description": "Cart not found"
@@ -338,9 +535,20 @@
             "200": {
               "description": "OK",
               "content": {
-                "schema": {
-                  "type":"object",
-                  "$ref": "#/components/schemas/CartAndBuyRes"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/CartAndBuyRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "A História da Programação",
+                        "price": 40.49,
+                        "description": "Excelente livro.",
+                        "author": "Peter Jr",
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-26T02:13:05.384Z"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -354,12 +562,12 @@
           "requestBody": {
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Email" }
-              },
-              "examples": {
-                "cart": {
-                  "value": {
-                    "email": "john1@mail.com"                    
+                "schema": { "$ref": "#/components/schemas/Email" },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "email": "john@mail.com"
+                    }
                   }
                 }
               }
@@ -367,24 +575,35 @@
           },
           "responses": {
             "401": {
-              "description": "Missing admin permissions"
+              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
             },
             "404": {
-              "description": "User not found, Cart not found, Product not found, Product not found in cart"
+              "description": "User not found, Cart not found, Book not found in store, Book not found in cart"
             },
             "200": {
               "description": "OK",
               "content": {
-                "schema": {
-                  "type":"object",
-                  "$ref": "#/components/schemas/CartAndBuyRes"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/CartAndBuyRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "name": "A História da Programação",
+                        "price": 40.49,
+                        "description": "Excelente livro.",
+                        "author": "Peter Jr",
+                        "created_at": "2022-01-25T02:13:05.384Z",
+	                      "updated_at": "2022-01-26T02:13:05.384Z"
+                      }
+                    }
+                  }
                 }
               }
             }
           }
         }
       },
-      "/buy": {
+      "/purchase": {
         "post": {
           "description": "Essa rota é responsavel por concluir a compra dos itens que estão no carrinho. Qualquer usuário autenticado tem acesso a esse endpoint.",
           "tags": ["Buy"],
@@ -579,59 +798,71 @@
     "components": {
       "schemas": {
         "UserReq": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            },
-            "is_adm": {
-              "type": "boolean"
+          "schemas":{
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "is_adm": {
+                "type": "boolean"
+              }
             }
           }
         },
         "UserRes": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string"
-            },
-            "is_adm": {
-              "type": "boolean"
-            },
-            "created_at": {
-              "type": "timestamp"
-            },
-            "updated_at": {
-              "type": "timestamp"
+          "schemas": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "is_adm": {
+                "type": "boolean"
+              },
+              "created_at": {
+                "type": "timestamp"
+              },
+              "updated_at": {
+                "type": "timestamp"
+              }
             }
           }
         },
         "UserList": {
-          "type":"object[]",
-          "properties": {
-            "name": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string"
-            },
-            "is_adm": {
-              "type": "boolean"
-            },
-            "created_at": {
-              "type": "timestamp"
-            },
-            "updated_at": {
-              "type": "timestamp"
+          "schemas": {
+            "ArrayOfUsers": {
+              "type":"array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "is_adm": {
+                    "type": "boolean"
+                  },
+                  "created_at": {
+                    "type": "timestamp"
+                  },
+                  "updated_at": {
+                    "type": "timestamp"
+                  }
+                }
+              }
+           
             }
           }
         },
@@ -654,7 +885,7 @@
             }
           }
         },
-        "ProductReq": {
+        "BookReq": {
           "type": "object",
           "properties": {
             "name": {
@@ -664,11 +895,14 @@
               "type": "number"
             },
             "description": {
+              "type": "string"
+            },
+            "author": {
               "type": "string"
             }
           }
         },
-        "ProductRes": {
+        "BookRes": {
           "type": "object",
           "properties": {
             "name": {
@@ -678,6 +912,9 @@
               "type": "number"
             },
             "description": {
+              "type": "string"
+            },
+            "author": {
               "type": "string"
             },
             "created_at": {
@@ -698,6 +935,9 @@
               "type": "number"
             },
             "description": {
+              "type": "string"
+            },
+            "author": {
               "type": "string"
             },
             "created_at": {

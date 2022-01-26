@@ -5,16 +5,18 @@ interface Request {
     title: string;
     price: number;
     description: string;    
+    author: string;
 }
 
 class CreateBookService {
-    public async execute({title, price, description}: Request): Promise<Book> {
+    public async execute({title, price, description, author}: Request): Promise<Book> {
         const bookRepository = getRepository(Book);
 
         const book = bookRepository.create({
             title,
             price,
-            description
+            description,
+            author
         })
 
         await bookRepository.save(book);

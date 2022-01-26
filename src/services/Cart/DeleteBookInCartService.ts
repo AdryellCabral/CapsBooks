@@ -60,7 +60,7 @@ class DeleteBookInCartService {
         const updatedCart = await cartRepository.findCart(user.id);
 
         if (!updatedCart) {
-            throw new AppError("Cart not found");
+            throw new AppError("Cart not found", 404);
         }
        
        return updatedCart;
