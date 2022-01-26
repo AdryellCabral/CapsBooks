@@ -6,50 +6,48 @@ import ReviewRepository from "../../repositories/ReviewRepository";
 import Book from "../../models/Book";
 
 interface Request {
-  user_id: string;
-  book_id: string;
+  userId: string;
+  bookId: string;
   comment: string;
   review: number;
 }
 
 export default class CreateReviewService {
   public async execute({
-    book_id,
+    bookId,
     comment,
     review,
-    user_id,
+    userId,
   }: Request): Promise<Review> {
     const reviewRepository = getCustomRepository(ReviewRepository);
-
     const userRepository = getCustomRepository(UserRepository);
-
     const bookRepository = getRepository(Book);
 
     const checkUserExists = await userRepository.findOne({
-      where: { id: user_id },
-    });
-
-    const checkBookExists = await bookRepository.findOne({
-      where: { id: book_id },
+      where: { id: userId },
     });
 
     if (!checkUserExists) {
       throw new AppError("User not found!", 404);
     }
 
+    const checkBookExists = await bookRepository.findOne({
+      where: { id: bookId },
+    });
+
     if (!checkBookExists) {
       throw new AppError("Book not found!", 404);
     }
 
-    const new_review = reviewRepository.create({
+    const newReview = reviewRepository.create({
       review,
       comment,
-      user_id,
-      book_id,
+      userId,
+      bookId,
     });
 
-    await reviewRepository.save(new_review);
+    await reviewRepository.save(newReview);
 
-    return new_review;
+    return newReview;
   }
 }

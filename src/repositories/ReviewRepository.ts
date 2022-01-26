@@ -4,13 +4,13 @@ import Review from "../models/Review";
 @EntityRepository(Review)
 class ReviewRepository extends Repository<Review> {
   public async findByUserIdAndBookId(
-    user_id: string,
-    book_id: string
+    userId: string,
+    bookId: string
   ): Promise<Review | undefined> {
     const review = await this.findOne({
       where: {
-        user_id: user_id,
-        book_id: book_id,
+        userId,
+        bookId
       },
     });
     return review;

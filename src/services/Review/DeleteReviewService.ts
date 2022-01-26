@@ -1,6 +1,6 @@
-import { DeleteResult, getCustomRepository } from "typeorm";
-import ReviewRepository from "../../repositories/ReviewRepository";
+import { DeleteResult, getRepository } from "typeorm";
 import AppError from "../../errors/AppError";
+import Review from "../../models/Review";
 
 interface Request {
   id: string;
@@ -8,13 +8,14 @@ interface Request {
 
 export default class DeleteReviewService {
   public async execute({ id }: Request): Promise<DeleteResult> {
-    const reviewRepository = getCustomRepository(ReviewRepository);
+    const reviewRepository = getRepository(Review);
 
-    const review_to_delete = await reviewRepository.findById(id);
+    const reviewToDelete = await reviewRepository.findOne(id);
 
-    if (!review_to_delete) {
-      throw new AppError("Review not found!", 404);
+    if (!reviewToDelete) {
+      throw new AppError("Review not found", 404);
     }
+
     return reviewRepository.delete(id);
   }
 }

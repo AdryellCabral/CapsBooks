@@ -10,12 +10,13 @@ import AppError from "../errors/AppError";
 import { classToClass } from "class-transformer";
 import checkIfAdm from "../middlewares/verifications/checkIfAdm";
 import checkIfAdmAndCartEqualId from "../middlewares/verifications/checkIfAdmAndCartEqualId";
+import findBooks from "../middlewares/verifications/findBooks";
 
 const cartRouter = Router();
 
 cartRouter.use(ensureAuth)
 
-cartRouter.post("/", validate(cartSchema), async (req, res) => {
+cartRouter.post("/", validate(cartSchema), findBooks, async (req, res) => {
     const { books_ids } = req.body;
     const userId = req.user.id
 
