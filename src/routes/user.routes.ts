@@ -38,7 +38,7 @@ userRouter.get("/profile", async (req, res) => {
   const { id } = req.user;
   const getUser = new RetrieveUserService();
   const user = await getUser.execute({ id });
-  return res.json(classToClass(user));
+  return res.status(200).json(classToClass(user));
 });
 
 userRouter.patch("/:id", AdmOrUserLoged, async (req, res) => {
@@ -54,7 +54,7 @@ userRouter.patch("/:id", AdmOrUserLoged, async (req, res) => {
 
   const user = await updateUser.execute({ id, idLogged, name, email });
 
-  return res.json(classToClass(user));
+  return res.status(200).json(classToClass(user));
 });
 
 userRouter.delete("/:id", AdmOrUserLoged, async (req, res) => {
@@ -68,7 +68,7 @@ userRouter.delete("/:id", AdmOrUserLoged, async (req, res) => {
     idLogged
   });
 
-  return res.json({ message: "User deleted with success" });
+  return res.status(204).json({ message: "User deleted with success" });
 });
 
 userRouter.use(checkIfAdm);
@@ -76,7 +76,7 @@ userRouter.use(checkIfAdm);
 userRouter.get("/", async (req, res) => {
   const listUsers = new ListUserService();
   const users = await listUsers.execute();
-  return res.json(classToClass(users));
+  return res.status(200).json(classToClass(users));
 });
 
 export default userRouter;
