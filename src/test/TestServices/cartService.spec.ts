@@ -44,7 +44,8 @@ describe("Testing the cart CRUD", () => {
       .send({
         title: "1984",
         price: 50,
-        description: "fiction book by George Orwell",
+        author: "George Orwell",
+        description: "fiction book",
       })
       .set({ Authorization: `Bearer ${adm_token}` });
 

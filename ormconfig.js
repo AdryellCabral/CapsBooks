@@ -16,6 +16,7 @@ const testEnv = {
     migrations: ["./src/database/migrations/*.ts"],
     synchronize: true,
     logging: false,
+    // dropSchema: true,
     cli: {
       migrationsDir: "./src/database/migrations",
     },

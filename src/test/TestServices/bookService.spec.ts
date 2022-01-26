@@ -36,7 +36,8 @@ describe("Testing the book CRUD", () => {
       .send({
         title: "1984",
         price: 50,
-        description: "fiction book by George Orwell",
+        author: "George Orwell",
+        description: "fiction book",
       })
       .set({ Authorization: `Bearer ${token}` });
 
@@ -76,6 +77,6 @@ describe("Testing the book CRUD", () => {
       .delete(`/book/${id}`)
       .set({ Authorization: `Bearer ${token}` });
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(204);
   });
 });

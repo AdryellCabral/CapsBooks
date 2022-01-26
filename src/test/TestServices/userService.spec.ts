@@ -63,6 +63,6 @@ describe("Testing the user CRUD", () => {
       .delete(`/user/${id}`)
       .set({ Authorization: `Bearer ${token}` });
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(204);
   });
 });
