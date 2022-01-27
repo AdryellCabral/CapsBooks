@@ -11,7 +11,7 @@ const developmentEnv = {
 
 const testEnv = {
     type: "postgres",
-    url: process.env.DATABASE_URL,
+    url: process.env.DATABASE_URL_TEST,
     entities: ["./src/models/*.ts"],
     migrations: ["./src/database/migrations/*.ts"],
     synchronize: true,
