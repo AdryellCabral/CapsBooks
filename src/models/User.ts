@@ -34,10 +34,10 @@ class User {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => Order, (order) => order.user, {eager: true})
+  @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
 
-  @OneToMany(() => Review, (review) => review.user, {eager: true})
+  @OneToMany(() => Review, (review) => review.user)
   review: Review[];
 }
 
