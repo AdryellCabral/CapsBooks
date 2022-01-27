@@ -3,9 +3,29 @@ import { getConnection } from "typeorm";
 import app from "../../app";
 import connection from "../../database";
 
+export async function clearDB() {
+  const entities = getConnection().entityMetadatas;
+  for (const entity of entities) {
+    const repository = await getConnection().getRepository(entity.name);
+    await repository.query(
+      `TRUNCATE ${entity.tableName} RESTART IDENTITY CASCADE;`
+    );
+  }
+}
+
+// afterEach(async () => {
+//   const entities = getConnection().entityMetadatas;
+
+//   for (const entity of entities) {
+//     const repository = getConnection().getRepository(entity.name); // Get repository
+//     await repository.clear(); // Clear each entity table's content
+//   }
+// });
+
 describe("Testing the user CRUD", () => {
   beforeAll(async () => {
     await connection();
+    await clearDB();
   });
 
   afterAll(async () => {
