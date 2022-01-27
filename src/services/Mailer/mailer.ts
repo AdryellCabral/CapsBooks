@@ -5,7 +5,8 @@ import hbs from "nodemailer-express-handlebars";
 
 interface RequestReport {
   name: string;
-  totalCost: number;
+  totalCost: string;
+  books: string;
 }
 interface RequestChangePassword {
   name: string;
@@ -55,8 +56,7 @@ export default class SendEmailService {
         template: mailerType,
         context: obj,
       };
-      // console.log("====================================================================================================")
-    
+     
       const mailerSend = await transport.sendMail(mailOptions, (error, info) => {
         if (error) {
           throw new AppError("Error while sending the email", 500);

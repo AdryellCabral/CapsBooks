@@ -7,7 +7,7 @@ import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
 import AppError from "../errors/AppError";
 import { classToClass } from "class-transformer";
 import checkIfAdmAndPurchaseEqualId from "../middlewares/verifications/checkIfAdmAndPurchaseEqualId";
-import SendEmailService from "../services/Mailer/mailer"
+import SendPurchaseMailerService from "../services/Purchase/SendPurchaseMailerService"
 
 const purchaseRouter = Router();
 
@@ -22,18 +22,12 @@ purchaseRouter.post("/", async (req, res) => {
         userId,    
     });
 
-  const createUser = new SendEmailService();
-  const userRepository = getCustomRepository(UserRepository);
+    const sendPurchaseMailerService = new SendPurchaseMailerService();
 
-  const user = await userRepository.findOne(userId);
-  if ( !user ){
-    throw new AppError("Not found any user with this id.", 404);
-  }
-
-  await createUser.execute(user.email, "report", {
-    name: user.name ,
-    totalCost: purchase.getTotal(),
-  });
+    await sendPurchaseMailerService.execute({ 
+        purchase,       
+        userId,    
+    });
 
     return res.status(201).json(classToClass(purchase));    
 })
