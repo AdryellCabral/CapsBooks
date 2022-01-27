@@ -23,7 +23,6 @@ describe("Testing the cart CRUD", () => {
 
   let second_token = "";
   let second_user_id = "";
-  let second_cart_id = "";
 
   let adm_token = "";
 
@@ -126,6 +125,9 @@ describe("Testing the cart CRUD", () => {
   it("Should be able to delete a specific product in a cart", async () => {
     const response = await request(app)
       .delete(`/cart/${book_id}`)
+      .send({
+        email: "user@mail.com",
+      })
       .set({ Authorization: `Bearer ${token}` });
 
     expect(response.status).toBe(200);
