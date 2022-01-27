@@ -28,7 +28,7 @@ export default class CreateReviewService {
     });
 
     if (!checkUserExists) {
-      throw new AppError("User not found!", 404);
+      throw new AppError("User not found", 404);
     }
 
     const checkBookExists = await bookRepository.findOne({
@@ -36,7 +36,7 @@ export default class CreateReviewService {
     });
 
     if (!checkBookExists) {
-      throw new AppError("Book not found!", 404);
+      throw new AppError("Book not found", 404);
     }
 
     const newReview = reviewRepository.create({
