@@ -601,7 +601,7 @@
           }
         }
       },
-      "/cart/{product_id}": {
+      "/cart/{book_id}": {
         "delete": {
           "description": "Essa rota é responsavel por excluir um item de um carrinho específico. Precisa de autenticação. Um usuário não admin só pode excluir itens do seu próprio carrinho.",
           "tags": ["Cart"],
@@ -945,7 +945,7 @@
       },     
       "/recover": {
         "post": {
-          "description": "Rota do 'esqueci senha'. Envia um email para o usuário.",
+          "description": "Rota do 'esqueci senha'. Envia um email para o usuário com um token que deve ser passado no header ao chamar a rota /change_password.",
           "tags": ["Mailer"],
           "requestBody": {
             "content": {
@@ -975,7 +975,7 @@
       },
       "/change_password": {
         "post": {
-          "description": "Rota para cadastrar nova senha. Envia um email para o usuário.",
+          "description": "Rota para cadastrar nova senha. O token recebido deve ser passado no header. Como resposta, envia um email para o usuário confirmando que a senha foi trocada.",
           "tags": ["Mailer"],
           "requestBody": {
             "content": {
