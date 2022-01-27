@@ -43,7 +43,7 @@ userRouter.get("/profile", async (req, res) => {
 
 userRouter.patch("/:id", AdmOrUserLoged, async (req, res) => {
   const { id } = req.params;
-  const { name, email } = req.body;
+  const { name, email, old_password, password } = req.body;
   const idLogged = req.user.id;
 
   if(name && typeof name !== "string"){
@@ -52,7 +52,7 @@ userRouter.patch("/:id", AdmOrUserLoged, async (req, res) => {
 
   const updateUser = new UpdateUserService();
 
-  const user = await updateUser.execute({ id, idLogged, name, email });
+  const user = await updateUser.execute({ id, idLogged, name, email, old_password, password });
 
   return res.status(200).json(classToClass(user));
 });
