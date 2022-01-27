@@ -12,6 +12,7 @@ describe("Testing the book CRUD", () => {
 
   afterAll(async () => {
     const defaultConnection = getConnection("default");
+    await clearDB();
     await defaultConnection.close();
   });
 

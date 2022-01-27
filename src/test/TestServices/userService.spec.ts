@@ -13,15 +13,6 @@ export async function clearDB() {
   }
 }
 
-// afterEach(async () => {
-//   const entities = getConnection().entityMetadatas;
-
-//   for (const entity of entities) {
-//     const repository = getConnection().getRepository(entity.name); // Get repository
-//     await repository.clear(); // Clear each entity table's content
-//   }
-// });
-
 describe("Testing the user CRUD", () => {
   beforeAll(async () => {
     await connection();
