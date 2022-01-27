@@ -9,7 +9,7 @@ async function AdmOrUserLoged(
   next: NextFunction
 ): Promise<void> {
   const user_id = req.user.id;
-  const param_id = req.params.uuid;
+  const param_id = req.params.id;
 
   const userRepository = getCustomRepository(UserRepository);
 
@@ -21,7 +21,7 @@ async function AdmOrUserLoged(
   }
 
   if (!user2) {
-    throw new AppError("Not found any user");
+    throw new AppError("User not found");
   }
 
   if (user.is_adm === false && user.id !== user2.id) {
