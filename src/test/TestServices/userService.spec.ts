@@ -37,8 +37,6 @@ describe("Testing the user CRUD", () => {
 
     id = response.body.id;
 
-    console.log(id);
-
     expect(response.status).toBe(201);
   });
 
