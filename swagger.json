@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-      "title": "Common User App",
+      "title": "Capsbooks",
       "description": "This is a sample server for a book store.",
       "contact": {
         "name": "API Support",
@@ -12,6 +12,10 @@
     },
   
     "servers": [
+      {
+        "url": "https://capsbook.herokuapp.com/api-documentation",
+        "description": "deploy"
+      },
       {
         "url": "http://localhost:3000/api-documentation",
         "description": "test"
@@ -151,11 +155,11 @@
             }   
           },
           "responses": {
-            "401": {
-              "description": "Missing authorization headers, Invalid Token"
-            },
             "404": {
               "description": "User not found"
+            },
+            "401": {
+              "description": "Missing authorization headers, Invalid Token"
             },
             "200": {
               "description": "OK",
@@ -200,11 +204,11 @@
             }
           },
           "responses": {
-            "401": {
-              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
-            },
             "404": {
               "description": "User not found"
+            },
+            "401": {
+              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
             },
             "200": {
               "description": "OK",
@@ -237,14 +241,14 @@
             }
           },
           "responses": {
-            "401": {
-              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
-            },
             "404": {
               "description": "User not found"
             },
+            "401": {
+              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
+            },
             "204": {
-              "description": "OK",
+              "description": "No Content",
               "content": {
                 "application/json": {                 
                 }
@@ -286,6 +290,7 @@
                   "examples": {
                     "Example": {
                       "value": {
+                        "id": "62768994-1af1-469a-a305-66fb1056a1a1",
                         "name": "A História da Programação",
                         "price": 30.49,
                         "description": "Excelente livro.",
@@ -318,6 +323,7 @@
                   "examples": {
                     "Example": {
                       "value": [{
+                        "id": "62768994-1af1-469a-a305-66fb1056a1a1",
                         "name": "A História da Programação",
                         "price": 30.49,
                         "description": "Excelente livro.",
@@ -335,7 +341,7 @@
       },
       "/book/{id}": {
         "get": {
-          "description": "Essa rota é responsavel por listar umlivro específico. Qualquer pessoa tem acesso a esse endpoint (não precisa estar autenticado).",
+          "description": "Essa rota é responsavel por listar um livro específico. Qualquer pessoa tem acesso a esse endpoint (não precisa estar autenticado).",
           "tags": ["Book"],
           "requestBody": {
             "content": {
@@ -355,6 +361,7 @@
                   "examples": {
                     "Example": {
                       "value": {
+                        "id": "62768994-1af1-469a-a305-66fb1056a1a1",
                         "name": "A História da Programação",
                         "price": 30.49,
                         "description": "Excelente livro.",
@@ -387,11 +394,11 @@
             }
           },
           "responses": {
-            "401": {
-              "description": "Missing authorization headers, Invalid Token, Unauthorized. Only admin has access to this endpoint."
-            },
             "404": {
               "description": "Book not found"
+            },
+            "401": {
+              "description": "Missing authorization headers, Invalid Token, Unauthorized. Only admin has access to this endpoint."
             },
             "200": {
               "description": "OK",
@@ -401,6 +408,7 @@
                   "examples": {
                     "Example": {
                       "value": {
+                        "id": "62768994-1af1-469a-a305-66fb1056a1a1",
                         "name": "A História da Programação",
                         "price": 40.49,
                         "description": "Excelente livro.",
@@ -425,14 +433,14 @@
             }
           },
           "responses": {
+            "404": {
+              "description": "Book not found"
+            },
             "401": {
               "description": "Missing authorization headers, Invalid Token, Unauthorized. Only admin has access to this endpoint."
             },
-            "404": {
-              "description": "User not found"
-            },
             "204": {
-              "description": "OK",
+              "description": "No Content",
               "content": {
                 "application/json": {                 
                 }
@@ -443,7 +451,7 @@
       }, 
       "/cart": {
         "post": {
-          "description": "Essa rota é responsavel por colocar um produto no carrinho. Qualquer usuário autenticado tem acesso a esse endpoint.",
+          "description": "Essa rota é responsavel por colocar um produto no carrinho. Precisa de autenticação. Qualquer usuário autenticado tem acesso a esse endpoint.",
           "tags": ["Cart"],
           "requestBody": {
             "content": {
@@ -461,12 +469,12 @@
           },
           "responses": {
             "401": {
-              "description": "Missing authorization headers, Invalid Token,Unauthorized. Only admin has access to this endpoint."
+              "description": "Missing authorization headers, Invalid Token"
             },
             "400": {
               "description": "Invalid list of books"
             },
-            "200": {
+            "201": {
               "description": "Ok",
               "content": {
                 "application/json": {
@@ -474,12 +482,23 @@
                   "examples": {
                     "Example": {
                       "value": {
-                        "name": "A História da Programação",
-                        "price": 40.49,
-                        "description": "Excelente livro.",
-                        "author": "Peter Jr",
-                        "created_at": "2022-01-25T02:13:05.384Z",
-	                      "updated_at": "2022-01-26T02:13:05.384Z"
+                        "id": "66fc31be-9553-42ed-97df-e2d53e6ae19e",
+                        "userId": "582dab86-022f-41fd-846d-1f9811e42111",
+                        "books": [
+                          {
+                            "id": "588a8d31-9bda-4f51-af9f-e8ec1e3b4472",
+                            "created_at": "2022-01-26T18:01:52.904Z",
+                            "book": {
+                              "id": "92b92266-d92e-4fea-bbe0-d56d49c7e93f",
+                              "title": "O grande livro de Futebol 3",
+                              "author": "John 4",
+                              "description": "O jogo",
+                              "price": "10.49",
+                              "created_at": "2022-01-26T01:07:16.616Z",
+                              "updated_at": "2022-01-26T01:07:16.616Z"    
+                            }
+                          }
+                        ]
                       }
                     }
                   }
@@ -489,7 +508,7 @@
           }
         },
         "get": {
-          "description": "Essa rota é responsavel por listar todos os carrinhos. Apenas usuários admin têm acesso a esse endpoint.",
+          "description": "Essa rota é responsavel por listar todos os carrinhos. Precisa de autenticação. Apenas usuários admin têm acesso a esse endpoint.",
           "tags": ["Cart"],
           "requestBody": {
             "content": {
@@ -499,23 +518,34 @@
           },
           "responses": {
             "401": {
-              "description": "Missing authorization headers, Invalid Token, Unauthorized"
+              "description": "Missing authorization headers, Invalid Token, Unauthorized. Only admin has access to this endpoint."
             },
             "200": {
               "description": "OK",
               "content": {
                 "application/json": {
-                  "schema": { "$ref": "#/components/schemas/CartAndBuyRes" },
+                  "schema": { "$ref": "#/components/schemas/CartAndBuyList" },
                   "examples": {
                     "Example": {
-                      "value": {
-                        "name": "A História da Programação",
-                        "price": 40.49,
-                        "description": "Excelente livro.",
-                        "author": "Peter Jr",
-                        "created_at": "2022-01-25T02:13:05.384Z",
-	                      "updated_at": "2022-01-26T02:13:05.384Z"
-                      }
+                      "value": [{
+                        "id": "66fc31be-9553-42ed-97df-e2d53e6ae19e",
+                        "userId": "582dab86-022f-41fd-846d-1f9811e42111",
+                        "books": [
+                          {
+                            "id": "588a8d31-9bda-4f51-af9f-e8ec1e3b4472",
+                            "created_at": "2022-01-26T18:01:52.904Z",
+                            "book": {
+                              "id": "92b92266-d92e-4fea-bbe0-d56d49c7e93f",
+                              "title": "O grande livro de Futebol 3",
+                              "author": "John 4",
+                              "description": "O jogo",
+                              "price": "10.49",
+                              "created_at": "2022-01-26T01:07:16.616Z",
+                              "updated_at": "2022-01-26T01:07:16.616Z"
+                            }
+                          }
+                        ]
+                      }]
                     }
                   }
                 }
@@ -526,7 +556,7 @@
       },
       "/cart/{id}": {
         "get": {
-          "description": "Essa rota é responsavel por listar um carrinho específico. Um usuário não admin pode visualizar apenas seu próprio carrinho.",
+          "description": "Essa rota é responsavel por listar um carrinho específico. Precisa de autenticação. Um usuário não admin pode visualizar apenas seu próprio carrinho.",
           "tags": ["Cart"],
           "requestBody": {
             "content": {
@@ -535,11 +565,11 @@
             }
           },
           "responses": {
-            "401": {
-              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
-            },
             "404": {
               "description": "Cart not found"
+            },
+            "401": {
+              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
             },
             "200": {
               "description": "OK",
@@ -549,12 +579,23 @@
                   "examples": {
                     "Example": {
                       "value": {
-                        "name": "A História da Programação",
-                        "price": 40.49,
-                        "description": "Excelente livro.",
-                        "author": "Peter Jr",
-                        "created_at": "2022-01-25T02:13:05.384Z",
-	                      "updated_at": "2022-01-26T02:13:05.384Z"
+                        "id": "66fc31be-9553-42ed-97df-e2d53e6ae19e",
+                        "userId": "582dab86-022f-41fd-846d-1f9811e42111",
+                        "books": [
+                          {
+                            "id": "588a8d31-9bda-4f51-af9f-e8ec1e3b4472",
+                            "created_at": "2022-01-26T18:01:52.904Z",
+                            "book": {
+                              "id": "92b92266-d92e-4fea-bbe0-d56d49c7e93f",
+                              "title": "O grande livro de Futebol 3",
+                              "author": "John 4",
+                              "description": "O jogo",
+                              "price": "10.49",
+                              "created_at": "2022-01-26T01:07:16.616Z",
+                              "updated_at": "2022-01-26T01:07:16.616Z"
+                            }
+                          }
+                        ]
                       }
                     }
                   }
@@ -566,7 +607,7 @@
       },
       "/cart/{product_id}": {
         "delete": {
-          "description": "Essa rota é responsavel por excluir um item de um carrinho específico. Um usuário não admin só pode excluir itens do seu próprio carrinho.",
+          "description": "Essa rota é responsavel por excluir um item de um carrinho específico. Precisa de autenticação. Um usuário não admin só pode excluir itens do seu próprio carrinho.",
           "tags": ["Cart"],
           "requestBody": {
             "content": {
@@ -583,11 +624,11 @@
             }
           },
           "responses": {
-            "401": {
-              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
-            },
             "404": {
               "description": "User not found, Cart not found, Book not found in store, Book not found in cart"
+            },
+            "401": {
+              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
             },
             "200": {
               "description": "OK",
@@ -597,12 +638,10 @@
                   "examples": {
                     "Example": {
                       "value": {
-                        "name": "A História da Programação",
-                        "price": 40.49,
-                        "description": "Excelente livro.",
-                        "author": "Peter Jr",
-                        "created_at": "2022-01-25T02:13:05.384Z",
-	                      "updated_at": "2022-01-26T02:13:05.384Z"
+                        "id": "66fc31be-9553-42ed-97df-e2d53e6ae19e",
+                        "userId": "582dab86-022f-41fd-846d-1f9811e42111",
+                        "books": [                          
+                        ]
                       }
                     }
                   }
@@ -614,119 +653,319 @@
       },
       "/purchase": {
         "post": {
-          "description": "Essa rota é responsavel por concluir a compra dos itens que estão no carrinho. Qualquer usuário autenticado tem acesso a esse endpoint.",
-          "tags": ["Buy"],
+          "description": "Essa rota é responsavel por concluir a compra dos itens que estão no carrinho e envia um email com o custo total da compra. Precisa de autenticação. Qualquer usuário autenticado tem acesso a esse endpoint.",
+          "tags": ["Purchase"],
           "requestBody": {
             "content": {
               "application/json": {                
-              },
-              "examples": {
-                "buy": {
-                  "value": {                        
-                  }
-                }
-              }
+              }              
             }
           },
           "responses": {
+            "422": {
+              "description": "Cart is empty"
+            },
+            "404": {
+              "description": "No cart was found, Purchase not found"
+            },
             "401": {
-              "description": "Missing authorization headers"
+              "description": "Missing authorization headers, Invalid Token"
             },
             "201": {
               "description": "Ok",
               "content": {
-                "schema": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/CartAndBuyRes"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/CartAndBuyRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "id": "66fc31be-9553-42ed-97df-e2d53e6ae19e",
+                        "userId": "582dab86-022f-41fd-846d-1f9811e42111",
+                        "books": [
+                          {
+                            "id": "588a8d31-9bda-4f51-af9f-e8ec1e3b4472",
+                            "created_at": "2022-01-26T18:01:52.904Z",
+                            "book": {
+                              "id": "92b92266-d92e-4fea-bbe0-d56d49c7e93f",
+                              "title": "O grande livro de Futebol 3",
+                              "author": "John 4",
+                              "description": "O jogo",
+                              "price": "10.49",
+                              "created_at": "2022-01-26T01:07:16.616Z",
+                              "updated_at": "2022-01-26T01:07:16.616Z"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
                 }
               }
             }
           }
         },
         "get": {
-          "description": "Essa rota é responsavel por listar todas as compras. Apenas usuários admin têm acesso a esse endpoint.",
-          "tags": ["Buy"],
+          "description": "Essa rota é responsavel por listar todas as compras. Precisa de autenticação. Usuários não admin conseguem observar apenas suas compras.",
+          "tags": ["Purchase"],
           "requestBody": {
             "content": {
               "application/json": {
-              },
-              "examples": {
-                "buy": {
-                }
-              }
+              }             
             }
           },
           "responses": {
             "401": {
-              "description": "Unauthorized"
+              "description": "Missing authorization headers, Invalid Token"
             },
             "200": {
               "description": "OK",
               "content": {
-                "schema": {
-                  "type": "object[]",
-                  "$ref": "#/components/schemas/CartAndBuyList"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/CartAndBuyList" },
+                  "examples": {
+                    "Example": {
+                      "value": [{
+                        "id": "66fc31be-9553-42ed-97df-e2d53e6ae19e",
+                        "userId": "582dab86-022f-41fd-846d-1f9811e42111",
+                        "books": [
+                          {
+                            "id": "588a8d31-9bda-4f51-af9f-e8ec1e3b4472",
+                            "created_at": "2022-01-26T18:01:52.904Z",
+                            "book": {
+                              "id": "92b92266-d92e-4fea-bbe0-d56d49c7e93f",
+                              "title": "O grande livro de Futebol 3",
+                              "author": "John 4",
+                              "description": "O jogo",
+                              "price": "10.49",
+                              "created_at": "2022-01-26T01:07:16.616Z",
+                              "updated_at": "2022-01-26T01:07:16.616Z"
+                            }
+                          }
+                        ]
+                      }]
+                    }
+                  }
                 }
               }
             }
           }
         }
       },
-      "/buy/{id}": {
+      "/purchase/{id}": {
         "get": {
-          "description": "Essa rota é responsavel por listar uma compra específica. Um usuário não admin pode visualizar apenas suas próprias compras.",
-          "tags": ["Buy"],
+          "description": "Essa rota é responsavel por listar uma compra específica. Precisa de autenticação. Um usuário não admin pode visualizar apenas suas próprias compras.",
+          "tags": ["Purchase"],
           "requestBody": {
             "content": {
               "application/json": {
-              },
-              "examples": {
-                "buy": {
-                }
               }
             }
           },
           "responses": {
-            "401": {
-              "description": "Missing admin permissions"
-            },
             "404": {
-              "description": "Buy not found"
+              "description": "Purchase not found"
+            },
+            "401": {
+              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
             },
             "200": {
               "description": "OK",
               "content": {
-                "schema": {
-                  "type":"object",
-                  "$ref": "#/components/schemas/CartAndBuyRes"
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/CartAndBuyRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "id": "66fc31be-9553-42ed-97df-e2d53e6ae19e",
+                        "userId": "582dab86-022f-41fd-846d-1f9811e42111",
+                        "books": [
+                          {
+                            "id": "588a8d31-9bda-4f51-af9f-e8ec1e3b4472",
+                            "created_at": "2022-01-26T18:01:52.904Z",
+                            "book": {
+                              "id": "92b92266-d92e-4fea-bbe0-d56d49c7e93f",
+                              "title": "O grande livro de Futebol 3",
+                              "author": "John 4",
+                              "description": "O jogo",
+                              "price": "10.49",
+                              "created_at": "2022-01-26T01:07:16.616Z",
+                              "updated_at": "2022-01-26T01:07:16.616Z"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
                 }
               }
             }
           }
         }
       },
-      "/email": {
+      "/book/{id}/review": {
         "post": {
-          "description": "Envia um email para um usuário específico informando quanto ele já gastou até o momento na loja. Apenas um usuário admin pode ter acesso a esse endpoint.",
-          "tags": ["Mailer"],
+          "description": "Essa rota é responsavel por criar uma review. Precisa de autenticação. Qualquer usuário pode criar uma review.",
+          "tags": ["Review"],
           "requestBody": {
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Email" }
-              },
-              "examples": {
-                "mailer": {
-                  "value": {
-                    "email": "john@mail.com"                    
+                "schema": { "$ref": "#/components/schemas/ReviewReq" },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "review": 8,
+                      "comment": "Um dos melhores livros que li."
+                    }
                   }
                 }
               }
             }
           },
           "responses": {
-            "401": {
-              "description": "Missing admin permissions"
+            "404": {
+              "description": "Usre not found, Book not found"
             },
+            "401": {
+              "description": "Missing authorization headers, Invalid Token."
+            },
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/ReviewRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "id": "62768994-1af1-469a-a305-66fb1056a1a1",
+                        "review": 8,
+                        "comment": "Um dos melhores livros que li.",
+                        "created_at": "2022-01-25T02:13:05.384Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }        
+      },
+      "/review": {   
+        "get": {
+          "description": "Essa rota é responsavel por listar todas as reviews. Precisa de autenticação. Apenas um usuário admin tem acesso a esse endpoint.",
+          "tags": ["Review"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+              }            
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Missing authorization headers, Invalid Token, Unauthorized. Only admin has access to this endpoint"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/ReviewList" },
+                  "examples": {
+                    "Example": {
+                      "value": [{
+                        "id": "62768994-1af1-469a-a305-66fb1056a1a1",
+                        "review": 8,
+                        "comment": "Um dos melhores livros que li.",
+                        "created_at": "2022-01-25T02:13:05.384Z"
+                      }]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/review/{id}": {
+        "get": {
+          "description": "Essa rota é responsavel por listar uma review específica. Precisa estar autenticado. Qualquer usuário tem acesso a esse endpoint.",
+          "tags": ["Review"],
+          "requestBody": {
+            "content": {
+              "application/json": {                
+              }
+            }   
+          },
+          "responses": {
+            "404": {
+              "description": "Book not found"
+            },
+            "401": {
+              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/ReviewRes" },
+                  "examples": {
+                    "Example": {
+                      "value": {
+                        "id": "62768994-1af1-469a-a305-66fb1056a1a1",
+                        "review": 8,
+                        "comment": "Um dos melhores livros que li.",
+                        "created_at": "2022-01-25T02:13:05.384Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "description": "Essa rota é responsavel por excluir um livro específico. Precisa de autenticação. Apenas um usuário admin tem acesso a essa rota.",
+          "tags": ["Review"],
+          "requestBody": {
+            "content": {
+              "application/json": {               
+              }
+            }
+          },
+          "responses": {
+            "404": {
+              "description": "Review not found"
+            },
+            "401": {
+              "description": "Missing authorization headers, Invalid Token, Missing admin permissions"
+            },
+            "204": {
+              "description": "No Content",
+              "content": {
+                "application/json": {                 
+                }
+              }
+            }
+          }
+        }
+      },     
+      "/recover": {
+        "post": {
+          "description": "Rota do 'esqueci senha'. Envia um email para o usuário com um token para ser usado na rota para cadastrar nova senha.",
+          "tags": ["Mailer"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Email" },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "email": "john@amail.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
             "404": {
               "description": "User not found"
             },
@@ -738,19 +977,20 @@
           }
         }
       },
-      "/recuperar": {
+      "/change_password": {
         "post": {
-          "description": "Envia um email para um usuário solicitando com um código de confirmação para trocar a senha.",
+          "description": "Rota para cadastrar nova senha. Usa um token de validação recebido por email no header.",
           "tags": ["Mailer"],
           "requestBody": {
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Email" }
-              },
-              "examples": {
-                "mailer": {
-                  "value": {
-                    "email": "john@mail.com"                    
+                "schema": { "$ref": "#/components/schemas/NovaSenha" },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "email": "john@amail.com",
+                      "password": "12345678"
+                    }
                   }
                 }
               }
@@ -760,40 +1000,8 @@
             "404": {
               "description": "User not found"
             },
-            "200": {
-              "description": "OK",
-              "content": {
-              }
-            }
-          }
-        }
-      },
-      "/alterar_senha": {
-        "post": {
-          "description": "Usando o código de verificação, o usuário consegue gravar nova senha. O usuário recebe um email de confirmação.",
-          "tags": ["Mailer"],
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/NovaSenha" }
-              },
-              "examples": {
-                "mailer": {
-                  "value": {
-                    "email": "john1@mail.com",
-                    "password": "123456",
-                    "token": "3ad414c381c82a5fa4210b3c88deca086986eeec"                   
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
             "400": {
               "description": "Invalid token, Token expired; generate a new one"
-            },
-            "404": {
-              "description": "User not found"
             },
             "200": {
               "description": "OK",
@@ -844,7 +1052,7 @@
           }
         },
         "UserList": {
-            "type": "object[]",
+            "type": "User[]",
             "properties": {
               "name": {
                 "type": "string"
@@ -903,6 +1111,9 @@
         "BookRes": {
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string"
+            },
             "name": {
               "type": "string"
             },
@@ -924,8 +1135,11 @@
           }
         },
         "BookList": {
-          "type": "object[]",
+          "type": "BookRes[]",
           "properties": {
+            "id": {
+              "type": "string"
+            },
             "name": {
               "type": "string"
             },
@@ -946,10 +1160,47 @@
             }
           }
         },
+        "Books": {
+          "type":"object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "timestamp"
+            },
+            "book": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "timestamp"
+                },
+                "updated_at": {
+                  "type": "timestamp"
+                }
+              }
+            }
+          }
+        },
         "CartAndBuyReq": {
           "type": "object",
           "properties": {
-            "products_ids": {
+            "books_ids": {
               "type": "array",
               "items": {
                 "type": "string"
@@ -966,8 +1217,8 @@
             "userId": {
               "type": "string"
             },
-            "products": {
-              "type":"object[]",
+            "books": {
+              "type":"Books[]",
               "properties": {
                 "id": {
                   "type": "string"
@@ -975,8 +1226,8 @@
                 "created_at": {
                   "type": "timestamp"
                 },
-                "product": {
-                  "type": "object",
+                "book": {
+                  "type": "BookRes",
                   "properties": {
                     "name": {
                       "type": "string"
@@ -985,6 +1236,9 @@
                       "type": "number"
                     },
                     "description": {
+                      "type": "string"
+                    },
+                    "author": {
                       "type": "string"
                     },
                     "created_at": {
@@ -1008,7 +1262,7 @@
             "userId": {
               "type": "string"
             },
-            "products": {
+            "books": {
               "type": "object[]",
               "properties": {
                 "id": {
@@ -1017,9 +1271,12 @@
                 "created_at": {
                   "type": "timestamp"
                 },
-                "product": {
+                "book": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "string"
+                    },
                     "name": {
                       "type": "string"
                     },
@@ -1041,6 +1298,54 @@
             }
           }
         },
+        "ReviewReq": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "review": {
+              "type": "number"
+            },
+            "comment": {
+              "type": "string"
+            }
+          }
+        },
+        "ReviewRes": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "review": {
+              "type": "number"
+            },
+            "comment": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "timestamp"
+            }
+          }
+        },
+        "ReviewList": {
+          "type": "ReviewRes[]",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "review": {
+              "type": "number"
+            },
+            "comment": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "timestamp"
+            }
+          }
+        },
         "Email": {
           "type": "object",
           "properties": {
@@ -1057,10 +1362,7 @@
             },
             "password": {
               "type": "string"
-            },
-            "token": {
-              "type": "string"
-            }                
+            }           
           }
         }
       }

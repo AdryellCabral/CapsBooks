@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from "typeorm";
 import Review from "./Review";
+import { Exclude } from "class-transformer";
 
 @Entity("books")
 class Book {
@@ -31,6 +32,7 @@ class Book {
   @UpdateDateColumn()
   updated_at: Date;
 
+  @Exclude()
   @OneToMany(() => Review, (review) => review.book, { eager: true })
   reviews: Review[];
 }
