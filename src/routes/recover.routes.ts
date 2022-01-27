@@ -3,14 +3,15 @@ import { classToClass } from "class-transformer";
 import SendEmailService from "../services/Mailer/mailer";
 import UserRepository from "../repositories/UserRepository";
 import { getCustomRepository } from "typeorm";
+import { recoverSchema } from "../models/schemas/RecoverSchema";
+import { validate } from "../middlewares/validations/schema";
 
 import jwt from "jsonwebtoken";
 
 import AppError from "../errors/AppError";
 
-
 const recoverRouter = Router();
-recoverRouter.post("/", async (req, res) => {
+recoverRouter.post("/", validate(recoverSchema), async (req, res) => {
   const { email } = req.body;
   const userRepository = getCustomRepository(UserRepository);
   

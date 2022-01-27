@@ -1,12 +1,14 @@
 import { Router } from "express";
 import ChangePasswordService from "../services/Mailer/ChangePasswordService";
+import { changePasswordSchema } from "../models/schemas/ChangePasswordSchema";
+import { validate } from "../middlewares/validations/schema";
 
 import AppError from "../errors/AppError";
 import changePasswordAuth from "../middlewares/verifications/changePasswordAuth";
 
 
 const changePasswordRouter = Router();
-changePasswordRouter.post("/", changePasswordAuth, async (req, res) => {
+changePasswordRouter.post("/", validate(changePasswordSchema), changePasswordAuth, async (req, res) => {
     const { password, email } = req.body;
 
     const changePasswordUser = new ChangePasswordService();
