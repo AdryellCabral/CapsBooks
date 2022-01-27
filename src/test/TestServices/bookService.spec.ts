@@ -46,8 +46,6 @@ describe("Testing the book CRUD", () => {
 
     id = bookResponse.body.id;
 
-    console.log(id);
-
     expect(bookResponse.status).toBe(201);
   });
 

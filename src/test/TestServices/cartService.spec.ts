@@ -78,8 +78,6 @@ describe("Testing the cart CRUD", () => {
 
     cart_id = cartResponse.body.id;
 
-    console.log(cart_id);
-
     expect(cartResponse.status).toBe(201);
   });
 
