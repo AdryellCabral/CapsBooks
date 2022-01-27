@@ -30,66 +30,70 @@ bookRouter.get("/:id", async (req, res) => {
 });
 
 bookRouter.get("/", async (req, res) => {
-    const { title, author } = req.query;
+  const { title, author } = req.query;
 
-    const bookRepository = getRepository(Book);
-    
-    if (!title && !author) {    
-        const books = await bookRepository.find();
-    
-        return res.status(200).json(books);
-    }    
-    
-    if (title && !author) {
-        const books = await bookRepository.find({
-            where: {
-                title: ILike(`%${title}%`), 
-            }
-        });
-        
-        return res.status(200).json(books);
-    }
+  const bookRepository = getRepository(Book);
 
-    if (!title && author) {
-        const books = await bookRepository.find({
-            where: {
-                author: ILike(`%${author}%`), 
-            }
-        });
-        
-        return res.status(200).json(books);
-    }
+  if (!title && !author) {
+    const books = await bookRepository.find();
 
-    if (title && author) {
-        const books = await bookRepository.find({
-            where: {
-                author: ILike(`%${author}%`),
-                title: ILike(`%${title}%`)
-            }
-        });
-        
-        return res.status(200).json(books);
-    }
-})
+    return res.status(200).json(books);
+  }
+
+  if (title && !author) {
+    const books = await bookRepository.find({
+      where: {
+        title: ILike(`%${title}%`),
+      },
+    });
+
+    return res.status(200).json(books);
+  }
+
+  if (!title && author) {
+    const books = await bookRepository.find({
+      where: {
+        author: ILike(`%${author}%`),
+      },
+    });
+
+    return res.status(200).json(books);
+  }
+
+  if (title && author) {
+    const books = await bookRepository.find({
+      where: {
+        author: ILike(`%${author}%`),
+        title: ILike(`%${title}%`),
+      },
+    });
+
+    return res.status(200).json(books);
+  }
+});
 
 bookRouter.use(ensureAuth);
 
-bookRouter.post("/:book_id/review", validate(reviewSchema), async (req, res) => {
-  const userId = req.user.id;
-  const { book_id } = req.params;
-  const { comment, review } = req.body;
+bookRouter.post(
+  "/:book_id/review",
+  validate(reviewSchema),
+  async (req, res) => {
+    const userId = req.user.id;
+    const { book_id } = req.params;
+    const { comment, review } = req.body;
 
-  const createReview = new CreateReviewService();
+    const createReview = new CreateReviewService();
 
-  const reviews = await createReview.execute({
-    bookId: book_id,
-    comment,
-    review,
-    userId,
-  });
+    const reviews = await createReview.execute({
+      bookId: book_id,
+      comment,
+      review,
+      userId,
+    });
 
-  return res.status(201).json(classToClass(reviews));
-});
+    return res.status(201).json(classToClass(reviews));
+  }
+);
 
 bookRouter.use(checkIfAdm);
 
@@ -102,7 +106,7 @@ bookRouter.post("/", validate(bookSchema), async (req, res) => {
     title,
     price,
     description,
-    author
+    author,
   });
 
   return res.status(201).json(book);
@@ -126,13 +130,13 @@ bookRouter.patch("/:id", async (req, res) => {
 
   const updateBook = new UpdateBookService();
 
-    const book = await updateBook.execute({
-        id,
-        title,
-        price,
-        description,
-        author        
-    });
+  const book = await updateBook.execute({
+    id,
+    title,
+    price,
+    description,
+    author,
+  });
 
   return res.status(200).json(book);
 });
