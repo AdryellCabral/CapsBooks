@@ -10,18 +10,17 @@ const developmentEnv = {
 };
 
 const testEnv = {
-    type: "postgres",
-    url: process.env.DATABASE_URL,
-    entities: ["./src/models/*.ts"],
-    migrations: ["./src/database/migrations/*.ts"],
-    synchronize: true,
-    logging: false,
-    cli: {
-      migrationsDir: "./src/database/migrations",
-    },
-    ssl: false,
+  type: "postgres",
+  url: process.env.DATABASE_URL_TEST,
+  entities: ["./src/models/*.ts"],
+  migrations: ["./src/database/migrations/*.ts"],
+  synchronize: true,
+  logging: false,
+  cli: {
+    migrationsDir: "./src/database/migrations",
+  },
+  ssl: false,
 };
-
 
 const productionEnv = {
   type: "postgres",
@@ -38,7 +37,8 @@ const productionEnv = {
 };
 
 module.exports =
-  process.env.NODE_ENV === "production" ? productionEnv : process.env.NODE_ENV !== "test" ? developmentEnv : testEnv;
-
-
-
+  process.env.NODE_ENV === "production"
+    ? productionEnv
+    : process.env.NODE_ENV !== "test"
+    ? developmentEnv
+    : testEnv;

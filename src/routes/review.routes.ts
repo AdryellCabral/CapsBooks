@@ -22,17 +22,16 @@ reviewRouter.get("/:review_id", async (req, res) => {
 });
 
 reviewRouter.delete("/:review_id", async (req, res) => {
-    const id = req.params.review_id;
+  const id = req.params.review_id;
 
-    const deleteUser = new DeleteReviewService();
+  const deleteUser = new DeleteReviewService();
 
-    await deleteUser.execute({
-      id,
-    });
+  await deleteUser.execute({
+    id,
+  });
 
-    return res.status(204).json({ message: "Review deleted with success" });
-  }
-);
+  return res.status(204).json({ message: "Review deleted with success" });
+});
 
 reviewRouter.use(checkIfAdm);
 

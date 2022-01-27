@@ -13,6 +13,10 @@
   
     "servers": [
       {
+        "url": "https://capsbook.herokuapp.com/api-documentation",
+        "description": "deploy"
+      },
+      {
         "url": "http://localhost:3000/api-documentation",
         "description": "test"
       }
@@ -649,7 +653,7 @@
       },
       "/purchase": {
         "post": {
-          "description": "Essa rota é responsavel por concluir a compra dos itens que estão no carrinho. Precisa de autenticação. Qualquer usuário autenticado tem acesso a esse endpoint.",
+          "description": "Essa rota é responsavel por concluir a compra dos itens que estão no carrinho e envia um email com o custo total da compra. Precisa de autenticação. Qualquer usuário autenticado tem acesso a esse endpoint.",
           "tags": ["Purchase"],
           "requestBody": {
             "content": {

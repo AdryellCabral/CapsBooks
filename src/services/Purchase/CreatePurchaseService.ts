@@ -1,4 +1,4 @@
-import { getCustomRepository, getRepository } from "typeorm";
+import { getCustomRepository} from "typeorm";
 import Order from "../../models/Order";
 import AppError from "../../errors/AppError";
 import CartRepository from "../../repositories/CartRepository";
