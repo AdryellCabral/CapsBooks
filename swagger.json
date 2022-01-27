@@ -196,6 +196,7 @@
                     "value": {
                       "name": "Patrick Nekel Jr",
                       "email": "nekeldev@yahoo.com",
+                      "old_password": "1234",
                       "password": "123456"
                     }
                   }
