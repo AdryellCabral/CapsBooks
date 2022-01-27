@@ -30,7 +30,7 @@ class SendPurchaseMailerService {
 
         for (let i=0; i < purchase_books.length; i++ ) {
             let book = purchase_books[i].book
-            let html_data = `"${book.title}" por R$${book.price} ;  `
+            let html_data = `"${book.title}" por R$${book.price};  `
             books+=html_data
         }
         console.log("purchase",books)

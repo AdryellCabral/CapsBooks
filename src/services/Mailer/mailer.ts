@@ -44,7 +44,7 @@ export default class SendEmailService {
       
       let subject: string;
       if (mailerType === "report") {
-        subject = "Solicitação de relatório de vendas"
+        subject = "Notificação de compra na CapsBook "
       }else{
         subject = "token para alterar email."
       }
