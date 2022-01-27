@@ -1,11 +1,9 @@
 import { Router } from "express";
 import ensureAuth from "../middlewares/AuthenticateUserMiddleware";
-import onlyAdm from "../middlewares/verifications/onlyAdmMiddleware";
 import RetrieveReviewService from "../services/Review/RetrieveReviewService";
 import DeleteReviewService from "../services/Review/DeleteReviewService";
 import { classToClass } from "class-transformer";
 import checkIfAdmAndReviewEqualId from "../middlewares/verifications/checkIfAdmAndReviewEqualId";
-import Review from "../models/Review";
 import checkIfAdm from "../middlewares/verifications/checkIfAdm";
 import ListReviewService from "../services/Review/ListReviewService";
 

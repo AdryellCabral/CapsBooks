@@ -5,10 +5,10 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files",
-    "start": "node dist/app.js",
-    "dev": "ts-node-dev --files --inspect --ignore-watch node_modules src/app.ts",
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev --files --inspect --ignore-watch node_modules src/server.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
-    "test": "NODE_ENV=test jest"
+    "test": "NODE_ENV=test jest --detectOpenHandles"
   },
   "dependencies": {
     "@babel/cli": "^7.16.8",
