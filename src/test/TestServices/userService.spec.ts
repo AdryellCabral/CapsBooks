@@ -38,6 +38,29 @@ describe("Testing the user CRUD", () => {
     id = response.body.id;
 
     expect(response.status).toBe(201);
+    expect(response.body.email).toBe("user@mail.com");
+  });
+
+  it("Should not be able to create a new user", async () => {
+    const response = await request(app).post("/user").send({
+      name: "user",
+      password: "1234",
+      is_adm: true,
+    });
+
+    expect(response.status).toBe(400);
+  });
+
+  
+  it("Should not be able to create a new user", async () => {
+    const response = await request(app).post("/user").send({
+      name: "user",
+      email: "user@mail.com",
+      password: "1234",
+      is_adm: true,
+    });
+
+    expect(response.status).toBe(409);
   });
 
   it("Should be able to login with the created user", async () => {
@@ -57,6 +80,7 @@ describe("Testing the user CRUD", () => {
       .set({ Authorization: `Bearer ${token}` });
 
     expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(1);
   });
 
   it("Should be able to get the user profile informations", async () => {

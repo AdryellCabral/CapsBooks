@@ -47,12 +47,27 @@ describe("Testing the book CRUD", () => {
     id = bookResponse.body.id;
 
     expect(bookResponse.status).toBe(201);
+    expect(bookResponse.body.title).toBe("1984");
+  });
+
+   it("Should not be able to create a new book", async () => {
+    const bookResponse = await request(app)
+      .post("/book")
+      .send({
+        price: 50,
+        author: "George Orwell",
+        description: "fiction book",
+      })
+      .set({ Authorization: `Bearer ${token}` });
+
+    expect(bookResponse.status).toBe(400);    
   });
 
   it("Should be able to get all books", async () => {
     const response = await request(app).get(`/book`);
 
     expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(1);
   });
 
   it("Should be able to get one specific book", async () => {
@@ -79,5 +94,11 @@ describe("Testing the book CRUD", () => {
       .set({ Authorization: `Bearer ${token}` });
 
     expect(response.status).toBe(204);
+  });
+
+  it("Should not be able to get one specific book", async () => {
+    const response = await request(app).get(`/book/${id}`);
+
+    expect(response.status).toBe(404);
   });
 });
